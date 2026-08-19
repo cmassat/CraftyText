@@ -1,6 +1,5 @@
 <template>
   <div
-    ref="fileEl"
     :title="file.pathname"
     class="side-bar-file"
     :style="{ 'padding-left': `${depth * 6 + 10}px`, opacity: file.isMarkdown ? 1 : 0.75 }"
@@ -8,6 +7,7 @@
       { current: currentFile?.pathname === file.pathname, active: file.id === activeItem.id }
     ]"
     @click="handleFileClick"
+    @contextmenu.prevent="handleContextMenu"
   >
     <file-icon :name="file.name" />
     <input
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
@@ -42,7 +42,6 @@ const projectStore = useProjectStore()
 const editorStore = useEditorStore()
 
 const newName = ref('')
-const fileEl = ref<HTMLDivElement | null>(null)
 const renameInput = ref<HTMLInputElement | null>(null)
 
 const { renameCache } = storeToRefs(projectStore)
@@ -82,16 +81,17 @@ const rename = (): void => {
   }
 }
 
-onMounted(() => {
-  if (fileEl.value) {
-    fileEl.value.addEventListener('contextmenu', (event) => {
-      event.preventDefault()
-      projectStore.CHANGE_ACTIVE_ITEM(props.file)
-      showContextMenu(event, !!clipboard.value)
-    })
-  }
+const handleContextMenu = (event: MouseEvent): void => {
+  projectStore.CHANGE_ACTIVE_ITEM(props.file)
+  showContextMenu(event, !!clipboard.value)
+}
 
+onMounted(() => {
   bus.on('SIDEBAR::show-rename-input', focusRenameInput)
+})
+
+onBeforeUnmount(() => {
+  bus.off('SIDEBAR::show-rename-input', focusRenameInput)
 })
 </script>
 

@@ -11,7 +11,10 @@
     </div>
 
     <!-- Opened tabs -->
-    <div v-if="openedFilesInSidebar && showOpenedFilesSectionResolved" class="opened-files">
+    <div
+      v-if="openedFilesInSidebar && showOpenedFilesSectionResolved"
+      class="opened-files"
+    >
       <div class="title">
         <el-icon
           class="icon-arrow"
@@ -162,7 +165,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
@@ -255,6 +258,7 @@ const toggleDirectories = (): void => {
 
 // From createFileOrDirectoryMixins
 const handleInputFocus = (): void => {
+  if (!props.projectTree || createCacheDirname.value !== props.projectTree.pathname) return
   nextTick(() => {
     if (input.value) {
       input.value.focus()
@@ -269,32 +273,10 @@ const handleInputEnter = (): void => {
 
 onMounted(() => {
   bus.on('SIDEBAR::show-new-input', handleInputFocus)
+})
 
-  // Hide rename / create inputs on outside clicks. Buttons that open these
-  // inputs must use @click.stop so their click never reaches this listener.
-  document.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement | null
-    if (target && target.tagName !== 'INPUT') {
-      projectStore.CHANGE_ACTIVE_ITEM({})
-      projectStore.createCache = {}
-      projectStore.renameCache = null
-    }
-  })
-
-  document.addEventListener('contextmenu', (event) => {
-    const target = event.target as HTMLElement | null
-    if (target && target.tagName !== 'INPUT') {
-      projectStore.createCache = {}
-      projectStore.renameCache = null
-    }
-  })
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      projectStore.createCache = {}
-      projectStore.renameCache = null
-    }
-  })
+onBeforeUnmount(() => {
+  bus.off('SIDEBAR::show-new-input', handleInputFocus)
 })
 </script>
 

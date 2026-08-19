@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useLayoutStore } from '@/store/layout'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
@@ -145,6 +145,16 @@ onMounted(() => {
 
     dragBarEl.addEventListener('mousedown', mouseDownHandler, false)
   })
+
+  document.addEventListener('click', clearSidebarInputs)
+  document.addEventListener('contextmenu', clearSidebarInputs)
+  document.addEventListener('keydown', clearSidebarInputsOnEscape)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', clearSidebarInputs)
+  document.removeEventListener('contextmenu', clearSidebarInputs)
+  document.removeEventListener('keydown', clearSidebarInputsOnEscape)
 })
 
 const handleLeftIconClick = (name: string): void => {
@@ -168,6 +178,22 @@ const handleLeftIconClick = (name: string): void => {
 const handleLeftBottomClick = (name: string): void => {
   if (name === 'settings') {
     projectStore.OPEN_SETTING_WINDOW()
+  }
+}
+
+const clearSidebarInputs = (event: MouseEvent): void => {
+  const target = event.target as HTMLElement | null
+  if (target && target.tagName !== 'INPUT') {
+    projectStore.CHANGE_ACTIVE_ITEM({})
+    projectStore.createCache = {}
+    projectStore.renameCache = null
+  }
+}
+
+const clearSidebarInputsOnEscape = (event: KeyboardEvent): void => {
+  if (event.key === 'Escape') {
+    projectStore.createCache = {}
+    projectStore.renameCache = null
   }
 }
 </script>

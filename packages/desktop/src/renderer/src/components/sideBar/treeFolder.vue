@@ -1,12 +1,12 @@
 <template>
   <div class="side-bar-folder">
     <div
-      ref="folderEl"
       class="folder-name"
       :style="{ 'padding-left': `${depth * 6 + 10}px` }"
       :class="[{ active: folder.id === activeItem.id }]"
       :title="folder.pathname"
       @click="folderNameClick"
+      @contextmenu.prevent="handleContextMenu"
     >
       <el-icon
         class="icon-arrow"
@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/project'
 import { showContextMenu } from '../../contextMenu/sideBar'
@@ -78,7 +78,6 @@ const projectStore = useProjectStore()
 const createName = ref('')
 const newName = ref('')
 
-const folderEl = ref<HTMLDivElement | null>(null)
 const renameInput = ref<HTMLInputElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
 
@@ -131,16 +130,19 @@ const rename = (): void => {
   }
 }
 
+const handleContextMenu = (event: MouseEvent): void => {
+  projectStore.CHANGE_ACTIVE_ITEM(props.folder)
+  showContextMenu(event, !!clipboard.value)
+}
+
 onMounted(() => {
-  if (folderEl.value) {
-    folderEl.value.addEventListener('contextmenu', (event) => {
-      event.preventDefault()
-      projectStore.CHANGE_ACTIVE_ITEM(props.folder)
-      showContextMenu(event, !!clipboard.value)
-    })
-  }
   bus.on('SIDEBAR::show-new-input', handleInputFocus)
   bus.on('SIDEBAR::show-rename-input', focusRenameInput)
+})
+
+onBeforeUnmount(() => {
+  bus.off('SIDEBAR::show-new-input', handleInputFocus)
+  bus.off('SIDEBAR::show-rename-input', focusRenameInput)
 })
 </script>
 
