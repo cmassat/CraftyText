@@ -233,12 +233,18 @@ export const useProjectStore = defineStore('project', () => {
   function _findTreeForChange(change: TreeChange): ProjectTree | null {
     if (!change?.pathname) return projectTrees.value[0] ?? null
     const p = window.path.normalize(change.pathname)
+    let bestTree: ProjectTree | null = null
     for (const tree of projectTrees.value) {
-      if (p === tree.pathname || p.startsWith(tree.pathname + '/') || p.startsWith(tree.pathname + '\\')) {
-        return tree
+      if (
+        (p === tree.pathname ||
+          p.startsWith(tree.pathname + '/') ||
+          p.startsWith(tree.pathname + '\\')) &&
+        (!bestTree || tree.pathname.length > bestTree.pathname.length)
+      ) {
+        bestTree = tree
       }
     }
-    return null
+    return bestTree
   }
 
   function _processTreeEvent(tree: ProjectTree, type: string, change: TreeChange): void {
