@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { addFile, unlinkFile, addDirectory, unlinkDirectory, resortTree, updateFileMtime } from './treeCtrl'
 import { usePreferencesStore } from './preferences'
@@ -42,14 +42,23 @@ const createProjectRoot = (pathname: string): ProjectTree | null => {
 }
 
 interface BufferedProjectState {
-  rootDirectory: string
+  rootDirectories: string[]
+  rootDirectory: string  // first directory; read by the main process at restore time
 }
 
 const createBufferedProjectState = (state: unknown): BufferedProjectState => {
-  const s = (state || {}) as { rootDirectory?: string; projectTree?: { pathname?: string } }
-  return {
-    rootDirectory: normalizeProjectRoot(s.rootDirectory || s.projectTree?.pathname)
+  const s = (state || {}) as {
+    rootDirectories?: string[]
+    rootDirectory?: string
+    projectTree?: { pathname?: string }
   }
+  if (Array.isArray(s.rootDirectories)) {
+    const dirs = s.rootDirectories.map(normalizeProjectRoot).filter(Boolean)
+    return { rootDirectories: dirs, rootDirectory: dirs[0] ?? '' }
+  }
+  // Backward compat: old single-tree format
+  const single = normalizeProjectRoot(s.rootDirectory || s.projectTree?.pathname)
+  return { rootDirectories: single ? [single] : [], rootDirectory: single }
 }
 
 interface OpenProjectOptions {
@@ -82,7 +91,10 @@ export const useProjectStore = defineStore('project', () => {
   const newFileNameCache = ref<string>('')
   const renameCache = ref<string | null>(null)
   const clipboard = ref<ClipboardEntry | null>(null)
-  const projectTree = ref<ProjectTree | null>(null)
+  const projectTrees = ref<ProjectTree[]>([])
+  // Compat computed: returns the first open tree or null. All existing call
+  // sites that expect a single tree continue to work without modification.
+  const projectTree = computed(() => projectTrees.value[0] ?? null)
   const pendingTreeEvents = ref<PendingEvent[]>([])
 
   const preferencesStore = usePreferencesStore()
@@ -90,8 +102,8 @@ export const useProjectStore = defineStore('project', () => {
   watch(
     [() => preferencesStore.fileSortBy, () => preferencesStore.fileSortOrder],
     ([sortBy, sortOrder]) => {
-      if (projectTree.value) {
-        resortTree(projectTree.value, String(sortBy), String(sortOrder))
+      for (const tree of projectTrees.value) {
+        resortTree(tree, String(sortBy), String(sortOrder))
       }
     }
   )
@@ -101,10 +113,16 @@ export const useProjectStore = defineStore('project', () => {
     { scheduleBufferUpdate = true }: OpenProjectOptions = {}
   ): void {
     const layoutStore = useLayoutStore()
+
+    // Dedup: don't add the same directory twice.
+    const normalized = normalizeProjectRoot(pathname)
+    if (!normalized) return
+    if (projectTrees.value.some(t => t.pathname === normalized)) return
+
     const tree = createProjectRoot(pathname)
     if (!tree) return
 
-    projectTree.value = tree
+    projectTrees.value.push(tree)
 
     const layout = {
       rightColumn: 'files',
@@ -114,31 +132,53 @@ export const useProjectStore = defineStore('project', () => {
     layoutStore.SET_LAYOUT(layout, { scheduleBufferUpdate })
     layoutStore.DISPATCH_LAYOUT_MENU_ITEMS()
 
-    // Process pending events that arrived before projectTree was initialized.
+    // Drain any pending events that now match this tree's root. Events for a
+    // new folder are queued because they arrive before mt::open-directory.
+    const remaining: PendingEvent[] = []
     for (const event of pendingTreeEvents.value) {
-      _processTreeEvent(event.type, event.change)
+      const target = _findTreeForChange(event.change)
+      if (target) {
+        _processTreeEvent(target, event.type, event.change)
+      } else {
+        remaining.push(event)
+      }
     }
-    pendingTreeEvents.value = []
+    pendingTreeEvents.value = remaining
 
     if (scheduleBufferUpdate) {
       debouncedSendBufferedState()
     }
   }
 
+  function CLOSE_PROJECT(
+    pathname: string,
+    { scheduleBufferUpdate = true }: OpenProjectOptions = {}
+  ): void {
+    const normalized = normalizeProjectRoot(pathname)
+    projectTrees.value = projectTrees.value.filter(t => t.pathname !== normalized)
+    // Notify main so it clears _openedRootDirectory and stops watching. Without
+    // this, openFolder's isSamePathSync guard would silently skip re-opening the
+    // same folder after the user closes and tries to reopen it from the sidebar.
+    window.electron.ipcRenderer.send('mt::close-project', normalized)
+    if (scheduleBufferUpdate) {
+      debouncedSendBufferedState()
+    }
+  }
+
   function CREATE_BUFFERED_STATE(): BufferedProjectState {
+    const dirs = projectTrees.value.map(t => t.pathname)
     return createBufferedProjectState({
-      projectTree: projectTree.value
+      rootDirectories: dirs,
+      rootDirectory: dirs[0] ?? ''
     })
   }
 
   function RESTORE_BUFFERED_STATE(state: unknown): void {
-    const { rootDirectory } = createBufferedProjectState(state)
-    if (rootDirectory) {
-      if (projectTree.value?.pathname === rootDirectory) return
-      OPEN_PROJECT(rootDirectory, { scheduleBufferUpdate: false })
-    } else {
-      projectTree.value = null
-      pendingTreeEvents.value = []
+    const { rootDirectories } = createBufferedProjectState(state)
+    projectTrees.value = []
+    pendingTreeEvents.value = []
+    for (const dir of rootDirectories) {
+      OPEN_PROJECT(dir, { scheduleBufferUpdate: false })
     }
   }
 
@@ -151,20 +191,35 @@ export const useProjectStore = defineStore('project', () => {
   function LISTEN_FOR_UPDATE_PROJECT(): void {
     window.electron.ipcRenderer.on('mt::update-object-tree', (_e, payload) => {
       const { type, change } = (payload as { type: string; change: TreeChange }) ?? {}
-      if (!projectTree.value) {
+      const targetTree = _findTreeForChange(change)
+      if (!targetTree) {
+        // Queue events that don't match any currently open tree root; the
+        // matching tree may arrive shortly via mt::open-directory (chokidar
+        // fires initial population events before the open-directory IPC).
         pendingTreeEvents.value.push({ type, change })
         return
       }
-      _processTreeEvent(type, change)
+      _processTreeEvent(targetTree, type, change)
     })
   }
 
-  function _processTreeEvent(type: string, change: TreeChange): void {
+  function _findTreeForChange(change: TreeChange): ProjectTree | null {
+    if (!change?.pathname) return projectTrees.value[0] ?? null
+    const p = window.path.normalize(change.pathname)
+    for (const tree of projectTrees.value) {
+      if (p === tree.pathname || p.startsWith(tree.pathname + '/') || p.startsWith(tree.pathname + '\\')) {
+        return tree
+      }
+    }
+    return null
+  }
+
+  function _processTreeEvent(tree: ProjectTree, type: string, change: TreeChange): void {
     const editorStore = useEditorStore()
     switch (type) {
       case 'add': {
         const { pathname, data, isMarkdown } = change
-        addFile(projectTree.value!, change as Parameters<typeof addFile>[1], String(preferencesStore.fileSortBy), String(preferencesStore.fileSortOrder))
+        addFile(tree, change as Parameters<typeof addFile>[1], String(preferencesStore.fileSortBy), String(preferencesStore.fileSortOrder))
         if (isMarkdown && newFileNameCache.value && pathname === newFileNameCache.value) {
           const fileState = getFileStateFromData(data as Record<string, unknown>)
           editorStore.UPDATE_CURRENT_FILE(fileState)
@@ -173,18 +228,18 @@ export const useProjectStore = defineStore('project', () => {
         break
       }
       case 'unlink':
-        unlinkFile(projectTree.value!, change)
+        unlinkFile(tree, change)
         editorStore.SET_SAVE_STATUS_WHEN_REMOVE(change)
         break
       case 'addDir':
-        addDirectory(projectTree.value!, change)
+        addDirectory(tree, change)
         break
       case 'unlinkDir':
-        unlinkDirectory(projectTree.value!, change)
+        unlinkDirectory(tree, change)
         break
       case 'change':
         if (change?.mtimeMs !== undefined) {
-          updateFileMtime(projectTree.value!, change as Parameters<typeof updateFileMtime>[1], String(preferencesStore.fileSortBy), String(preferencesStore.fileSortOrder))
+          updateFileMtime(tree, change as Parameters<typeof updateFileMtime>[1], String(preferencesStore.fileSortBy), String(preferencesStore.fileSortOrder))
         }
         break
       default:
@@ -329,8 +384,10 @@ export const useProjectStore = defineStore('project', () => {
     renameCache,
     clipboard,
     projectTree,
+    projectTrees,
     pendingTreeEvents,
     OPEN_PROJECT,
+    CLOSE_PROJECT,
     CREATE_BUFFERED_STATE,
     RESTORE_BUFFERED_STATE,
     LISTEN_FOR_LOAD_PROJECT,

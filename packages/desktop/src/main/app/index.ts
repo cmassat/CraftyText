@@ -766,6 +766,15 @@ class App {
 
     // --- renderer -------------------
 
+    ipcMain.on('mt::close-project', (e, pathname: string) => {
+      const win = BrowserWindow.fromWebContents(e.sender)
+      if (!win) return
+      const editor = this._windowManager.get(win.id) as EditorWindow | undefined
+      if (editor) {
+        editor.closeFolder(pathname)
+      }
+    })
+
     ipcMain.on('mt::app-try-quit', () => {
       app.quit()
     })

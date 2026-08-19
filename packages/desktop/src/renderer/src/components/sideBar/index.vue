@@ -30,12 +30,43 @@
       v-show="rightColumn"
       class="right-column"
     >
-      <tree
+      <div
         v-if="rightColumn === 'files'"
-        :project-tree="projectTree"
-        :opened-files="openedFiles"
-        :tabs="tabs"
-      />
+        class="trees-container"
+      >
+        <tree
+          v-for="(tree, index) in projectTrees"
+          :key="tree.pathname"
+          :project-tree="tree"
+          :opened-files="openedFiles"
+          :tabs="tabs"
+          :show-opened-files-section="index === 0"
+          @close="projectStore.CLOSE_PROJECT(tree.pathname)"
+        />
+        <!-- Empty state when no folder is open -->
+        <tree
+          v-if="projectTrees.length === 0"
+          :project-tree="null"
+          :opened-files="openedFiles"
+          :tabs="tabs"
+          :show-opened-files-section="true"
+        />
+        <!-- Always-visible strip to add another folder when at least one is open -->
+        <div
+          v-if="projectTrees.length > 0"
+          class="open-folder-strip"
+        >
+          <el-button
+            text
+            bg
+            type="primary"
+            size="small"
+            @click="projectStore.ASK_FOR_OPEN_PROJECT()"
+          >
+            {{ t('sideBar.tree.openFolder') }}
+          </el-button>
+        </div>
+      </div>
       <side-bar-search v-else-if="rightColumn === 'search'" />
       <toc v-else-if="rightColumn === 'toc'" />
     </div>
@@ -52,6 +83,7 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { useLayoutStore } from '@/store/layout'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
+import { useI18n } from 'vue-i18n'
 
 import { sideBarIcons, sideBarBottomIcons } from './help'
 import Tree from './tree.vue'
@@ -63,6 +95,7 @@ import type { TabDescriptor } from './types'
 const layoutStore = useLayoutStore()
 const projectStore = useProjectStore()
 const editorStore = useEditorStore()
+const { t } = useI18n()
 
 const sideBar = ref<HTMLDivElement | null>(null)
 const dragBar = ref<HTMLDivElement | null>(null)
@@ -72,7 +105,7 @@ const sideBarViewWidth = ref(280)
 
 const { rightColumn, showSideBar, sideBarWidth } = storeToRefs(layoutStore)
 
-const { projectTree } = storeToRefs(projectStore)
+const { projectTrees } = storeToRefs(projectStore)
 const { tabs } = storeToRefs(editorStore)
 
 const finalSideBarWidth = computed<number>(() => {
@@ -211,6 +244,31 @@ const handleLeftBottomClick = (name: string): void => {
   flex: 1;
   width: calc(100% - 50px);
   overflow: hidden;
+}
+
+.trees-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.open-folder-strip {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  display: flex;
+}
+
+.open-folder-strip .el-button.is-text.is-has-bg {
+  background-color: var(--buttonPrimaryBgColor);
+  color: var(--buttonPrimaryFontColor);
+  border-color: transparent;
+}
+
+.open-folder-strip .el-button.is-text.is-has-bg:hover,
+.open-folder-strip .el-button.is-text.is-has-bg:focus {
+  background-color: var(--buttonPrimaryBgColorHover);
+  color: var(--buttonPrimaryFontColorHover);
 }
 
 .drag-bar {

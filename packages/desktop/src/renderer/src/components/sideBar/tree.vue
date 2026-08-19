@@ -1,11 +1,17 @@
 <template>
-  <div class="tree-view">
-    <div class="title">
+  <div
+    class="tree-view"
+    :class="{ 'is-collapsed': projectTree && !showDirectories }"
+  >
+    <div
+      v-if="showOpenedFilesSectionResolved"
+      class="title"
+    >
       <!-- Placeholder -->
     </div>
 
     <!-- Opened tabs -->
-    <div v-if="openedFilesInSidebar" class="opened-files">
+    <div v-if="openedFilesInSidebar && showOpenedFilesSectionResolved" class="opened-files">
       <div class="title">
         <el-icon
           class="icon-arrow"
@@ -83,6 +89,13 @@
         >{{
           projectTree.name
         }}</span>
+        <el-icon
+          class="close-icon"
+          title="Remove folder"
+          @click.stop="emit('close')"
+        >
+          <Close />
+        </el-icon>
       </div>
       <div
         v-show="showDirectories"
@@ -160,7 +173,7 @@ import OpenedFile from './treeOpenedTab.vue'
 import bus from '../../bus'
 import { showContextMenu } from '../../contextMenu/sideBar'
 import { useI18n } from 'vue-i18n'
-import { ArrowRight } from '@element-plus/icons-vue'
+import { ArrowRight, Close } from '@element-plus/icons-vue'
 import type { TreeNode, TabDescriptor } from './types'
 
 const { t } = useI18n()
@@ -173,17 +186,23 @@ const props = defineProps<{
   projectTree: TreeNode | null
   openedFiles?: TabDescriptor[]
   tabs?: TabDescriptor[]
+  // Set to false for all tree instances after the first to avoid rendering
+  // the opened-tabs section multiple times in the sidebar.
+  showOpenedFilesSection?: boolean
 }>()
 
+// Default showOpenedFilesSection to true when not provided.
+const showOpenedFilesSectionResolved = computed(() => props.showOpenedFilesSection !== false)
+
+const emit = defineEmits<{ (e: 'close'): void }>()
+
 const depth = 0
-// Persist the section collapse state (#2421). The tree is rendered under a
-// v-if and is destroyed when the sidebar collapses to its icon strip, so local
-// refs reset to expanded on re-open. Back them with localStorage (like the
-// sidebar width) so the state survives a re-mount and app restart.
-const SHOW_DIRECTORIES_KEY = 'side-bar-show-directories'
+// Per-tree localStorage keys so each folder's collapse state is independent.
+const directoriesKey = (): string =>
+  `side-bar-show-directories-${props.projectTree?.pathname ?? 'default'}`
 const SHOW_OPENED_FILES_KEY = 'side-bar-show-opened-files'
 const readSectionExpanded = (key: string): boolean => localStorage.getItem(key) !== 'false'
-const showDirectories = ref(readSectionExpanded(SHOW_DIRECTORIES_KEY))
+const showDirectories = ref(readSectionExpanded(directoriesKey()))
 const showOpenedFiles = ref(readSectionExpanded(SHOW_OPENED_FILES_KEY))
 const createName = ref('')
 const input = ref<HTMLInputElement | null>(null)
@@ -231,7 +250,7 @@ const toggleOpenedFiles = (): void => {
 
 const toggleDirectories = (): void => {
   showDirectories.value = !showDirectories.value
-  localStorage.setItem(SHOW_DIRECTORIES_KEY, String(showDirectories.value))
+  localStorage.setItem(directoriesKey(), String(showDirectories.value))
 }
 
 // From createFileOrDirectoryMixins
@@ -299,7 +318,13 @@ onMounted(() => {
   color: var(--sideBarColor);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tree-view.is-collapsed {
+  flex: none;
 }
 .tree-view > .title {
   height: 35px;
@@ -382,6 +407,11 @@ onMounted(() => {
   padding-right: 15px;
   display: flex;
   align-items: center;
+  cursor: pointer;
+}
+
+.project-tree > .title:hover {
+  background: var(--sideBarItemHoverBgColor);
 }
 
 .project-tree > .title > span {
@@ -389,7 +419,7 @@ onMounted(() => {
   user-select: none;
 }
 
-.project-tree > .title > a {
+.project-tree > .title > .close-icon {
   pointer-events: auto;
   cursor: pointer;
   margin-left: 8px;
@@ -397,11 +427,11 @@ onMounted(() => {
   opacity: 0;
 }
 
-.project-tree > .title > a:hover {
+.project-tree > .title > .close-icon:hover {
   color: var(--highlightThemeColor);
 }
 
-.project-tree > .title > a.active {
+.project-tree > .title > .close-icon.active {
   color: var(--highlightThemeColor);
 }
 
@@ -413,7 +443,7 @@ onMounted(() => {
 .project-tree > .tree-wrapper::-webkit-scrollbar:vertical {
   width: 8px;
 }
-.project-tree div.title:hover > a {
+.project-tree div.title:hover > .close-icon {
   opacity: 1;
 }
 .open-project {

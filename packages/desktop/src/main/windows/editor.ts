@@ -43,7 +43,7 @@ interface RestoredTab {
 interface RestoredBufferState {
   tabs: RestoredTab[]
   restoreWarnings?: unknown[]
-  project?: { rootDirectory?: string }
+  project?: { rootDirectory?: string; rootDirectories?: string[] }
   [key: string]: unknown
 }
 
@@ -52,9 +52,9 @@ class EditorWindow extends BaseWindow {
   private _directoryToOpen: string | null
   private _filesToOpen: PendingFile[] | null
   private _markdownToOpen: string[] | null
-  // Root directory and file list that are currently opened. These lists are
+  // Root directories and file list that are currently opened. These lists are
   // used to find the best window to open new files in.
-  private _openedRootDirectory: string | null
+  private _openedRootDirectories: string[]
   private _openedFiles: string[] | null
 
   public bufferStoreInfo: BufferStoreInfo | null
@@ -71,9 +71,9 @@ class EditorWindow extends BaseWindow {
     this._filesToOpen = [] // {doc: IMarkdownDocumentRaw, options: any, selected: boolean}
     this._markdownToOpen = [] // List of markdown strings or an empty string will open a new untitled tab
 
-    // Root directory and file list that are currently opened. These lists are
+    // Root directories and file list that are currently opened. These lists are
     // used to find the best window to open new files in.
-    this._openedRootDirectory = ''
+    this._openedRootDirectories = []
     this._openedFiles = []
 
     this.bufferStoreInfo = null
@@ -294,6 +294,21 @@ class EditorWindow extends BaseWindow {
   }
 
   /**
+   * Close a directory that was previously opened, stopping its watcher.
+   * Called when the renderer's sidebar removes a folder so that openFolder()
+   * doesn't skip re-opening it via the isSamePathSync guard.
+   */
+  closeFolder(pathname: string): void {
+    if (!pathname) return
+    const idx = this._openedRootDirectories.findIndex((d) => isSamePathSync(pathname, d))
+    if (idx === -1) return
+    const stored = this._openedRootDirectories[idx]
+    const { browserWindow } = this
+    ipcMain.emit('watcher-unwatch-directory', browserWindow, stored)
+    this._openedRootDirectories.splice(idx, 1)
+  }
+
+  /**
    * Open a new tab from a markdown file.
    */
   openTab(filePath: string, options: Record<string, unknown> = {}, selected: boolean = true): void {
@@ -376,14 +391,14 @@ class EditorWindow extends BaseWindow {
   }
 
   /**
-   * Open a (new) directory and replaces the old one.
+   * Add a directory to the set of open folders and start watching it.
    */
   openFolder(pathname: string): void {
     // TODO: Don't allow new files if quitting.
     if (
       !pathname ||
       this.lifecycle === WindowLifecycle.QUITTED ||
-      isSamePathSync(pathname, this._openedRootDirectory ?? '')
+      this._openedRootDirectories.some((d) => isSamePathSync(pathname, d))
     ) {
       return
     }
@@ -392,13 +407,9 @@ class EditorWindow extends BaseWindow {
       const { browserWindow } = this
       const { menu: appMenu, preferences } = this._accessor
 
-      if (this._openedRootDirectory) {
-        ipcMain.emit('watcher-unwatch-directory', browserWindow, this._openedRootDirectory)
-      }
-
       preferences.setItems({ lastOpenedFolder: pathname })
       appMenu.addRecentlyUsedDocument(pathname)
-      this._openedRootDirectory = pathname
+      this._openedRootDirectories.push(pathname)
       ipcMain.emit('watcher-watch-directory', browserWindow, pathname)
       browserWindow!.webContents.send('mt::open-directory', pathname)
     } else {
@@ -447,14 +458,14 @@ class EditorWindow extends BaseWindow {
    * Returns a score list for a given file list.
    */
   getCandidateScores(fileList: string[]): CandidateScore[] {
-    const { _openedFiles, _openedRootDirectory, id } = this
+    const { _openedFiles, _openedRootDirectories, id } = this
     const buf: CandidateScore[] = []
     for (const pathname of fileList) {
       let score = 0
       if (_openedFiles!.some((p) => p === pathname)) {
         score = -1
       } else {
-        if (isChildOfDirectory(_openedRootDirectory ?? '', pathname)) {
+        if (_openedRootDirectories.some((d) => isChildOfDirectory(d, pathname))) {
           score += 5
         }
         for (const item of _openedFiles!) {
@@ -478,7 +489,7 @@ class EditorWindow extends BaseWindow {
     this._directoryToOpen = ''
     this._filesToOpen = []
     this._markdownToOpen = []
-    this._openedRootDirectory = ''
+    this._openedRootDirectories = []
     this._openedFiles = []
 
     browserWindow!.webContents.once('did-finish-load', () => {
@@ -510,12 +521,12 @@ class EditorWindow extends BaseWindow {
     this._directoryToOpen = null
     this._filesToOpen = null
     this._markdownToOpen = null
-    this._openedRootDirectory = null
+    this._openedRootDirectories = []
     this._openedFiles = null
   }
 
   get openedRootDirectory(): string | null {
-    return this._openedRootDirectory
+    return this._openedRootDirectories[0] ?? null
   }
 
   // --- private ---------------------------------
@@ -573,9 +584,12 @@ class EditorWindow extends BaseWindow {
       if (!Array.isArray(bufferState.restoreWarnings)) {
         bufferState.restoreWarnings = []
       }
-      const rootDirectory = bufferState.project?.rootDirectory
-      if (rootDirectory) {
-        this.openFolder(rootDirectory)
+      const projectState = bufferState.project ?? {}
+      const rootDirs: string[] = Array.isArray(projectState.rootDirectories)
+        ? projectState.rootDirectories
+        : projectState.rootDirectory ? [projectState.rootDirectory] : []
+      for (const dir of rootDirs) {
+        if (dir) this.openFolder(dir)
       }
 
       // We still need to load the files of all opened tabs and check for errors/changed files
