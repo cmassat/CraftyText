@@ -16,6 +16,8 @@ import type { FileChangeDetail } from '@shared/types/files'
 type ProjectTree = TreeNode
 type TreeChange = FileChangeDetail
 
+const PENDING_TREE_EVENT_LIMIT = 1000
+
 const normalizeProjectRoot = (pathname: string | null | undefined): string => {
   return pathname ? window.path.normalize(pathname) : ''
 }
@@ -79,6 +81,7 @@ interface ClipboardEntry {
 interface PendingEvent {
   type: string
   change: TreeChange
+  key: string
 }
 
 export const useProjectStore = defineStore('project', () => {
@@ -196,11 +199,35 @@ export const useProjectStore = defineStore('project', () => {
         // Queue events that don't match any currently open tree root; the
         // matching tree may arrive shortly via mt::open-directory (chokidar
         // fires initial population events before the open-directory IPC).
-        pendingTreeEvents.value.push({ type, change })
+        _queuePendingTreeEvent(type, change)
         return
       }
       _processTreeEvent(targetTree, type, change)
     })
+  }
+
+  function _queuePendingTreeEvent(type: string, change: TreeChange): void {
+    if (!change?.pathname) return
+
+    const normalizedChange = {
+      ...change,
+      pathname: window.path.normalize(change.pathname)
+    }
+    const key = `${type}:${normalizedChange.pathname}`
+    const existingIndex = pendingTreeEvents.value.findIndex(event => event.key === key)
+    const event = { type, change: normalizedChange, key }
+    if (existingIndex !== -1) {
+      pendingTreeEvents.value.splice(existingIndex, 1, event)
+      return
+    }
+
+    pendingTreeEvents.value.push(event)
+    if (pendingTreeEvents.value.length > PENDING_TREE_EVENT_LIMIT) {
+      pendingTreeEvents.value.splice(
+        0,
+        pendingTreeEvents.value.length - PENDING_TREE_EVENT_LIMIT
+      )
+    }
   }
 
   function _findTreeForChange(change: TreeChange): ProjectTree | null {
