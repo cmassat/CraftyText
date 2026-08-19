@@ -130,6 +130,7 @@ interface SelectionFormat {
 
 interface ProjectStoreLike {
   projectTree: { pathname?: string } | null
+  projectTrees?: { pathname: string }[]
 }
 
 // ----------------------------------------------------------------------------

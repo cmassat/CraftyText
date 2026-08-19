@@ -15,6 +15,7 @@ interface QuickOpenSubcommand {
 
 interface FolderState {
   projectTree: { pathname: string } | null
+  projectTrees?: { pathname: string }[]
 }
 type RootState = { editor: EditorState; project: FolderState; [key: string]: unknown }
 
@@ -74,7 +75,7 @@ class QuickOpenCommand {
 
   run = async(): Promise<void> => {
     const { _editorState, _folderState } = this
-    if (!_folderState.projectTree && _editorState.tabs.length === 0) {
+    if (this._getRootPaths().length === 0 && _editorState.tabs.length === 0) {
       throw new Error(null as unknown as string)
     }
 
@@ -109,7 +110,8 @@ class QuickOpenCommand {
   _doSearch = (query: string): QuickOpenSubcommand[] | Promise<QuickOpenSubcommand[]> => {
     this._cancelFn = null
     const { _editorState, _folderState } = this
-    const isRootDirOpened = !!_folderState.projectTree
+    const rootPaths = this._getRootPaths()
+    const isRootDirOpened = rootPaths.length > 0
     const tabsAvailable = _editorState.tabs.length > 0
 
     // Only show opened files if no directory is opened.
@@ -118,7 +120,6 @@ class QuickOpenCommand {
     }
 
     const searchResult: string[] = []
-    const rootPath: string | null = isRootDirOpened ? _folderState.projectTree!.pathname : null
 
     // Add files that are not in the current root directory but opened.
     if (tabsAvailable) {
@@ -135,7 +136,7 @@ class QuickOpenCommand {
         if (
           pathname &&
           re.test(pathname) &&
-          (!rootPath || !window.fileUtils.isChildOfDirectory(rootPath, pathname))
+          !this._isChildOfAnyRoot(pathname, rootPaths)
         ) {
           searchResult.push(pathname)
         }
@@ -156,7 +157,7 @@ class QuickOpenCommand {
     return new Promise<QuickOpenSubcommand[]>((resolve, reject) => {
       let canceled = false
       const promises: Promise<void> & { cancel?: () => void } = this._directorySearcher
-        .search([rootPath!], '', {
+        .search(rootPaths, '', {
           didMatch: (result: unknown) => {
             if (canceled) return
             searchResult.push(result as string)
@@ -176,8 +177,9 @@ class QuickOpenCommand {
         })
         .then(() => {
           this._cancelFn = null
+          const uniqueResults = Array.from(new Set(searchResult))
           resolve(
-            searchResult.map((pathname) => {
+            uniqueResults.map((pathname) => {
               const item: QuickOpenSubcommand = { id: pathname }
               Object.assign(item, this._getPath(pathname))
               return item
@@ -213,8 +215,8 @@ class QuickOpenCommand {
   }
 
   _getPath = (pathname: string): { title?: string; description: string } => {
-    const rootPath: string = this._folderState.projectTree!.pathname
-    if (!window.fileUtils.isChildOfDirectory(rootPath, pathname)) {
+    const rootPath = this._getBestRootPath(pathname)
+    if (!rootPath) {
       return { title: pathname, description: pathname }
     }
 
@@ -224,6 +226,34 @@ class QuickOpenCommand {
       item.title = p
     }
     return item
+  }
+
+  _getRootPaths = (): string[] => {
+    const { projectTree, projectTrees } = this._folderState
+    const rootPaths = Array.isArray(projectTrees)
+      ? projectTrees.map(tree => tree.pathname).filter(Boolean)
+      : []
+    if (rootPaths.length) {
+      return rootPaths
+    }
+    return projectTree?.pathname ? [projectTree.pathname] : []
+  }
+
+  _isChildOfAnyRoot = (pathname: string, rootPaths: string[]): boolean => {
+    return rootPaths.some(rootPath => window.fileUtils.isChildOfDirectory(rootPath, pathname))
+  }
+
+  _getBestRootPath = (pathname: string): string | null => {
+    let bestRootPath: string | null = null
+    for (const rootPath of this._getRootPaths()) {
+      if (
+        window.fileUtils.isChildOfDirectory(rootPath, pathname) &&
+        (!bestRootPath || rootPath.length > bestRootPath.length)
+      ) {
+        bestRootPath = rootPath
+      }
+    }
+    return bestRootPath
   }
 }
 
