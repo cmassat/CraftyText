@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
 import bus from '../../bus'
@@ -74,6 +74,8 @@ const { t } = useI18n()
 
 const props = defineProps<{
   searchResult: SearchResult
+  expandAllToken?: number
+  expandAllState?: boolean
 }>()
 
 const editorStore = useEditorStore()
@@ -109,6 +111,15 @@ const extension = computed<string>(() => {
 const toggleSearchMatches = (): void => {
   showSearchMatches.value = !showSearchMatches.value
 }
+
+watch(
+  () => props.expandAllToken,
+  () => {
+    if (props.expandAllState !== undefined) {
+      showSearchMatches.value = props.expandAllState
+    }
+  }
+)
 
 const handleShowMoreMatches = (event: MouseEvent): void => {
   shownMatches.value += 15

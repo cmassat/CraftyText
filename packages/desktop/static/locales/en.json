@@ -230,7 +230,9 @@
       "noResultsFound": "No results found.",
       "cancel": "Cancel",
       "openFolder": "Open Folder",
-      "showMoreMatches": "Show more matches"
+      "showMoreMatches": "Show more matches",
+      "expandAll": "Expand all",
+      "collapseAll": "Collapse all"
     },
     "tree": {
       "openedFiles": "Opened files",

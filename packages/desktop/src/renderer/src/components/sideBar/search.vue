@@ -76,12 +76,31 @@
     </div>
     <div
       v-if="searchResult.length"
+      class="search-result-actions"
+    >
+      <button
+        type="button"
+        @click="setSearchResultsExpanded(true)"
+      >
+        {{ t('sideBar.search.expandAll') }}
+      </button>
+      <button
+        type="button"
+        @click="setSearchResultsExpanded(false)"
+      >
+        {{ t('sideBar.search.collapseAll') }}
+      </button>
+    </div>
+    <div
+      v-if="searchResult.length"
       class="search-result"
     >
       <search-result-item
         v-for="(item, index) of searchResult"
         :key="index"
         :search-result="item"
+        :expand-all-token="expandAllToken"
+        :expand-all-state="expandAllState"
       />
     </div>
     <div
@@ -132,6 +151,8 @@ const ripgrepDirectorySearcher = new RipgrepDirectorySearcher()
 
 const keyword = ref('')
 const searchResult = ref<SearchResult[]>([])
+const expandAllToken = ref(0)
+const expandAllState = ref<boolean | undefined>(undefined)
 const searcherRunning = ref(false)
 const showSearchCancelArea = ref(false)
 const searchErrorString = ref('')
@@ -290,6 +311,11 @@ const regexpClicked = (): void => {
   search()
 }
 
+const setSearchResultsExpanded = (expanded: boolean): void => {
+  expandAllState.value = expanded
+  expandAllToken.value += 1
+}
+
 let searchCancelTimer: ReturnType<typeof setTimeout> | null = null
 const startShowSearchCancelAreaTimer = (): void => {
   if (searchCancelTimer) {
@@ -416,6 +442,25 @@ onMounted(() => {
   margin-bottom: 5px;
   font-size: 12px;
   color: var(--sideBarColor);
+}
+.search-result-actions {
+  display: flex;
+  gap: 6px;
+  padding: 0 15px 8px 15px;
+}
+.search-result-actions > button {
+  color: var(--sideBarTextColor);
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 0 6px;
+}
+.search-result-actions > button:hover {
+  color: var(--highlightThemeColor);
+  background: var(--sideBarItemHoverBgColor);
 }
 .empty,
 .search-result {
