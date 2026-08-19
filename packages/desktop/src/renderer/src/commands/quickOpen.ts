@@ -119,7 +119,7 @@ class QuickOpenCommand {
       return []
     }
 
-    const searchResult: string[] = []
+    const searchResults = new Set<string>()
 
     // Add files that are not in the current root directory but opened.
     if (tabsAvailable) {
@@ -138,13 +138,13 @@ class QuickOpenCommand {
           re.test(pathname) &&
           !this._isChildOfAnyRoot(pathname, rootPaths)
         ) {
-          searchResult.push(pathname)
+          searchResults.add(pathname)
         }
       }
     }
 
     if (!isRootDirOpened) {
-      return searchResult.map((pathname) => {
+      return Array.from(searchResults, (pathname) => {
         return {
           id: pathname,
           description: pathname,
@@ -160,7 +160,7 @@ class QuickOpenCommand {
         .search(rootPaths, '', {
           didMatch: (result: unknown) => {
             if (canceled) return
-            searchResult.push(result as string)
+            searchResults.add(result as string)
           },
           didSearchPaths: (numPathsFound: unknown) => {
             // Cancel when more than 30 files were found. User should specify the search query.
@@ -177,11 +177,10 @@ class QuickOpenCommand {
         })
         .then(() => {
           this._cancelFn = null
-          const uniqueResults = Array.from(new Set(searchResult))
           resolve(
-            uniqueResults.map((pathname) => {
+            Array.from(searchResults, (pathname) => {
               const item: QuickOpenSubcommand = { id: pathname }
-              Object.assign(item, this._getPath(pathname))
+              Object.assign(item, this._getPath(pathname, rootPaths))
               return item
             })
           )
@@ -214,8 +213,8 @@ class QuickOpenCommand {
     return inclusions
   }
 
-  _getPath = (pathname: string): { title?: string; description: string } => {
-    const rootPath = this._getBestRootPath(pathname)
+  _getPath = (pathname: string, rootPaths: string[] = this._getRootPaths()): { title?: string; description: string } => {
+    const rootPath = this._getBestRootPath(pathname, rootPaths)
     if (!rootPath) {
       return { title: pathname, description: pathname }
     }
@@ -243,9 +242,9 @@ class QuickOpenCommand {
     return rootPaths.some(rootPath => window.fileUtils.isChildOfDirectory(rootPath, pathname))
   }
 
-  _getBestRootPath = (pathname: string): string | null => {
+  _getBestRootPath = (pathname: string, rootPaths: string[]): string | null => {
     let bestRootPath: string | null = null
-    for (const rootPath of this._getRootPaths()) {
+    for (const rootPath of rootPaths) {
       if (
         window.fileUtils.isChildOfDirectory(rootPath, pathname) &&
         (!bestRootPath || rootPath.length > bestRootPath.length)

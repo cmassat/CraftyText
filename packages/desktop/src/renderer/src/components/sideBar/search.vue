@@ -197,13 +197,16 @@ const search = (): void => {
   searcherRunning.value = true
   startShowSearchCancelAreaTimer()
 
-  const newSearchResult: SearchResult[] = []
+  const newSearchResults = new Map<string, SearchResult>()
   // Keep a handle on the cancellable thenable separately from the chained
   // `.then().catch()` (which is a plain `Promise<void>` and loses `cancel`).
   const cancellable = ripgrepDirectorySearcher.search(rootDirectoryPaths, keyword.value, {
     didMatch: (res: unknown) => {
       if (canceled) return
-      newSearchResult.push(res as SearchResult)
+      const result = res as SearchResult
+      if (!newSearchResults.has(result.filePath)) {
+        newSearchResults.set(result.filePath, result)
+      }
     },
     didSearchPaths: (numPathsFound: unknown) => {
       // More than 100 files with (multiple) matches were found.
@@ -232,7 +235,7 @@ const search = (): void => {
 
   cancellable
     .then(() => {
-      searchResult.value = newSearchResult
+      searchResult.value = Array.from(newSearchResults.values())
       searcherRunning.value = false
       searcherCancelCallback = null
       stopShowSearchCancelAreaTimer()
