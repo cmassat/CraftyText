@@ -48,7 +48,7 @@ export default async function DocPage({ params }: { params: Promise<Params> }) {
   const fallbackTab = firstPageOfTab(page.tab)
 
   const editHref =
-    DOWNLOAD.repo + '/edit/develop/packages/website/content/docs/' + page.file
+    DOWNLOAD.repo + '/edit/main/packages/website/content/docs/' + page.file
 
   return (
     <div className="docs-shell">
@@ -72,7 +72,7 @@ export default async function DocPage({ params }: { params: Promise<Params> }) {
           <Pager prev={prev} next={next} />
           <footer className="doc-footer">
             <span>
-              Last reviewed in the develop branch · open source under the MIT license.
+              Last reviewed in the main branch · open source under the MIT license.
             </span>
             <a className="edit-link" href={editHref} target="_blank" rel="noopener noreferrer">
               <svg

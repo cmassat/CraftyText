@@ -1,6 +1,6 @@
 # Performance Testing
 
-- We mainly rely on Chrome's `Performance` tab to analyse and record the performance of MarkText
+- We mainly rely on Chrome's `Performance` tab to analyse and record the performance of CraftyText
 
 - Electron is split into 3 processes: `main`, `preload` and `renderer`. We will be focusing on `main` and `renderer` since these are the heaviest
 
@@ -10,7 +10,7 @@
 pnpm run perf:inspect-brk
 ```
 
-- This launches a **production build** of Marktext that has a break-point **before** the first line of Javascript is ran
+- This launches a **production build** of CraftyText that has a break-point **before** the first line of Javascript is ran
 
 - A debugger at port `5858` is also attached
 
@@ -26,7 +26,7 @@ pnpm run perf:inspect-brk
 
 - When Developers Tools first launches, you will notice the breakpoint that is set
 
-- Simply go to `Performance`, press `Record`, and wait for MarkText to launch fully, then Stop the recording
+- Simply go to `Performance`, press `Record`, and wait for CraftyText to launch fully, then Stop the recording
 
 ## 1.3 Alternative: `inspect`
 
@@ -45,7 +45,6 @@ pnpm run start
 - This previews the most recent `pnpm run build` output via `electron-vite preview` with `PERF_TESTING=true` (so it behaves like a production launch). It does **not** rebuild — re-run `pnpm run build:unpack` first if your sources changed.
 
 - Press `F12` to open Dev Tools and press `Reload and Record` to benchmark start-up render performance
-
 
 
 

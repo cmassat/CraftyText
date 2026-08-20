@@ -15,12 +15,20 @@ import { t } from './i18n'
 type ErrorType = 'main' | 'renderer'
 type Logger = (s: string) => void
 
-const EXIT_ON_ERROR = !!process.env.MARKTEXT_EXIT_ON_ERROR
-const SHOW_ERROR_DIALOG = !process.env.MARKTEXT_ERROR_INTERACTION
+const EXIT_ON_ERROR = !!(process.env.CRAFTYTEXT_EXIT_ON_ERROR || process.env.MARKTEXT_EXIT_ON_ERROR)
+const SHOW_ERROR_DIALOG = !(process.env.CRAFTYTEXT_ERROR_INTERACTION || process.env.MARKTEXT_ERROR_INTERACTION)
 const ERROR_MSG_MAIN = (): string => t('error.unexpectedMainProcess')
 const ERROR_MSG_RENDERER = (): string => t('error.unexpectedRendererProcess')
 
 let logger: Logger = (s) => console.error(s)
+
+const isStableRelease = (): boolean => {
+  const releaseGlobals = global as unknown as {
+    CRAFTYTEXT_IS_STABLE?: boolean
+    MARKTEXT_IS_STABLE?: boolean
+  }
+  return !!(releaseGlobals.CRAFTYTEXT_IS_STABLE || releaseGlobals.MARKTEXT_IS_STABLE)
+}
 
 const getOSInformation = (): string => {
   return `${os.type()} ${os.arch()} ${os.release()} (${os.platform()})`
@@ -29,7 +37,7 @@ const getOSInformation = (): string => {
 const exceptionToString = (error: Error, type: ErrorType): string => {
   const { message, stack } = error
   return (
-    `Version: ${MARKTEXT_VERSION_STRING || app.getVersion()}\n` +
+    `Version: ${process.env.CRAFTYTEXT_VERSION_STRING || MARKTEXT_VERSION_STRING || app.getVersion()}\n` +
     `OS: ${getOSInformation()}\n` +
     `Type: ${type}\n` +
     `Date: ${new Date().toUTCString()}\n` +
@@ -53,8 +61,7 @@ const handleError = async(title: string, error: Error, type: ErrorType): Promise
     return
   } else if (
     !SHOW_ERROR_DIALOG ||
-    ((global as unknown as { MARKTEXT_IS_STABLE?: boolean }).MARKTEXT_IS_STABLE &&
-      type === 'renderer')
+    (isStableRelease() && type === 'renderer')
   ) {
     return
   }
@@ -94,7 +101,7 @@ ${title}.
 
 ### Version
 
-MarkText: ${MARKTEXT_VERSION_STRING}
+CraftyText: ${MARKTEXT_VERSION_STRING}
 Operating system: ${getOSInformation()}`
         )
         break
@@ -127,8 +134,8 @@ const setupExceptionHandler = (): void => {
 
   // start crashReporter to save core dumps to temporary folder
   crashReporter.start({
-    companyName: 'marktext',
-    productName: 'marktext',
+    companyName: 'craftytext',
+    productName: 'craftytext',
     submitURL: 'http://0.0.0.0/',
     uploadToServer: false,
     compress: true

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="CraftyText logo">
+  <defs>
+    <linearGradient id="bg" x1="168" y1="136" x2="856" y2="888" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17202a"/>
+      <stop offset="1" stop-color="#243447"/>
+    </linearGradient>
+    <linearGradient id="page" x1="268" y1="222" x2="742" y2="810" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#28d2bd"/>
+      <stop offset="1" stop-color="#148f87"/>
+    </linearGradient>
+  </defs>
+  <rect x="64" y="64" width="896" height="896" rx="208" fill="url(#bg)"/>
+  <path d="M296 184h312l144 146v510c0 44-36 80-80 80H296c-44 0-80-36-80-80V264c0-44 36-80 80-80z" fill="url(#page)"/>
+  <path d="M608 184v118c0 36 29 65 65 65h79z" fill="#93fff0" opacity=".92"/>
+  <path d="M296 704h408v68H296z" fill="#f2c14e"/>
+  <text x="512" y="600" text-anchor="middle" font-family="Inter, DejaVu Sans, Arial, sans-serif" font-size="300" font-weight="800" letter-spacing="-12" fill="#ffffff">CT</text>
+</svg>

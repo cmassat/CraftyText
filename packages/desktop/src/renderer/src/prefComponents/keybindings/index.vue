@@ -169,7 +169,7 @@ onUnmounted(() => {
 
 const openKeybindingDocs = (): void => {
   window.electron.shell.openExternal(
-    'https://marktext.me/docs/key-bindings'
+    'https://github.com/cmassat/craftytext'
   )
 }
 

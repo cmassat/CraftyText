@@ -1,7 +1,7 @@
 # Command Line Interface
 
 ```
-Usage: marktext [commands] [path ...]
+Usage: craftytext [commands] [path ...]
 
   Available commands:
 
@@ -16,8 +16,8 @@ Usage: marktext [commands] [path ...]
     -h, --help                    Print this help message
 ```
 
-`marktext` should point to your installation of MarkText. The exact location will vary from platform to platform. On macOS, you can create a convenient alias like:
+`craftytext` should point to your installation of CraftyText. The exact location will vary from platform to platform. On macOS, you can create a convenient alias like:
 
 ```sh
-alias marktext="/Applications/Mark\ Text.app/Contents/MacOS/Mark\ Text"
+alias craftytext="/Applications/CraftyText.app/Contents/MacOS/CraftyText"
 ```

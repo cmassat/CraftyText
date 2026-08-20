@@ -1,16 +1,9 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-// 301 www.marktext.me/* -> marktext.me/* so SEO indexes a single canonical
-// host. We do this in middleware rather than next.config.ts redirects()
-// because OpenNext Cloudflare does not currently substitute Next's `:path*`
-// destination tokens, which sends users to the literal /:path* URL (404).
+// No custom production domain is configured for CraftyText yet.
 export function middleware(req: NextRequest) {
-  if (req.headers.get('host')?.toLowerCase() !== 'www.marktext.me') return
-  const url = req.nextUrl.clone()
-  url.host = 'marktext.me'
-  url.protocol = 'https:'
-  url.port = ''
-  return NextResponse.redirect(url, 301)
+  void req
+  return undefined
 }
 
 export const config = {

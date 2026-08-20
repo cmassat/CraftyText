@@ -1,6 +1,6 @@
 # User Documentation
 
-Welcome to the end-user documentation of MarkText.
+Welcome to the end-user documentation of CraftyText.
 
 ![](assets/marktext-interface-2.png)
 

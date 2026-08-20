@@ -9,6 +9,9 @@ const ENV_ALLOWLIST = [
   'NODE_ENV',
   'PERF_TESTING',
   'APPIMAGE',
+  'CRAFTYTEXT_VERSION',
+  'CRAFTYTEXT_VERSION_STRING',
+  'CRAFTYTEXT_RIPGREP_PATH',
   'MARKTEXT_VERSION',
   'MARKTEXT_VERSION_STRING',
   'MARKTEXT_RIPGREP_PATH',
@@ -26,6 +29,9 @@ const pickEnv = (): Record<string, string> => {
 }
 
 const resolveRipgrepBinary = (): string => {
+  if (process.env.CRAFTYTEXT_RIPGREP_PATH) {
+    return process.env.CRAFTYTEXT_RIPGREP_PATH
+  }
   if (process.env.MARKTEXT_RIPGREP_PATH) {
     return process.env.MARKTEXT_RIPGREP_PATH
   }

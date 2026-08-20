@@ -1,14 +1,14 @@
 export const DOWNLOAD = {
-  mac: 'https://github.com/marktext/marktext/releases/latest/download/marktext-x64.dmg',
-  windows: 'https://github.com/marktext/marktext/releases/latest/download/marktext-setup.exe',
-  linux: 'https://github.com/marktext/marktext/releases/latest/download/marktext-x86_64.AppImage',
-  releases: 'https://github.com/marktext/marktext/releases',
-  repo: 'https://github.com/marktext/marktext',
-  contributing: 'https://github.com/marktext/marktext/blob/develop/.github/CONTRIBUTING.md',
-  issues: 'https://github.com/marktext/marktext/issues',
-  sponsor: 'https://github.com/sponsors/marktext',
+  mac: 'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-mac-x64-latest.dmg',
+  windows: 'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-win-x64-latest-setup.exe',
+  linux: 'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-linux-latest.AppImage',
+  releases: 'https://github.com/cmassat/craftytext/releases',
+  repo: 'https://github.com/cmassat/craftytext',
+  contributing: 'https://github.com/cmassat/craftytext/blob/main/.github/CONTRIBUTING.md',
+  issues: 'https://github.com/cmassat/craftytext/issues',
+  sponsor: 'https://github.com/cmassat/craftytext',
   twitter:
-    'https://twitter.com/intent/tweet?via=marktextme&url=https://github.com/marktext/marktext/&text=What%20do%20you%20want%20to%20say%20to%20app?&hashtags=happyMarkText',
-  serpapi: 'https://serpapi.com/?utm_source=marktext',
+    'https://twitter.com/intent/tweet?url=https://github.com/cmassat/craftytext/&text=CraftyText%20Markdown%20editor',
+  serpapi: 'https://serpapi.com/?utm_source=craftytext',
   ukey: 'https://www.ukey.com'
 }

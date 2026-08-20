@@ -15,6 +15,8 @@ import { t } from './i18n'
 import { registerSandboxIpcHandlers } from './ipc'
 
 // Set version strings into global and process.versions
+process.env.CRAFTYTEXT_VERSION = MARKTEXT_VERSION
+process.env.CRAFTYTEXT_VERSION_STRING = MARKTEXT_VERSION_STRING
 process.env.MARKTEXT_VERSION = MARKTEXT_VERSION
 process.env.MARKTEXT_VERSION_STRING = MARKTEXT_VERSION_STRING
 
@@ -53,7 +55,7 @@ initializeLogger(appEnvironment)
 // Handles native level crashes
 crashReporter.start({
   companyName: '',
-  productName: 'marktext',
+  productName: 'craftytext',
   uploadToServer: false, // collect locally
   compress: true
 })
@@ -83,7 +85,7 @@ if (!process.mas && process.env.NODE_ENV !== 'development') {
 registerSandboxIpcHandlers()
 
 // Windows-specific AppUserModelID
-electronApp.setAppUserModelId('com.electron.marktext')
+electronApp.setAppUserModelId('com.github.cmassat.craftytext')
 
 // Dev shortcuts and reload suppression
 app.on('browser-window-created', (_, window) => {
@@ -101,8 +103,8 @@ try {
     : ''
   log.error(t('error.initializationFailed', { hint: msgHint }), errorObj)
 
-  const EXIT_ON_ERROR = !!process.env.MARKTEXT_EXIT_ON_ERROR
-  const SHOW_ERROR_DIALOG = !process.env.MARKTEXT_ERROR_INTERACTION
+  const EXIT_ON_ERROR = !!(process.env.CRAFTYTEXT_EXIT_ON_ERROR || process.env.MARKTEXT_EXIT_ON_ERROR)
+  const SHOW_ERROR_DIALOG = !(process.env.CRAFTYTEXT_ERROR_INTERACTION || process.env.MARKTEXT_ERROR_INTERACTION)
   if (!EXIT_ON_ERROR && SHOW_ERROR_DIALOG) {
     dialog.showErrorBox(
       t('error.startupError'),

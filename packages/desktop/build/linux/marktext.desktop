@@ -1,17 +1,17 @@
 [Desktop Entry]
-Name=MarkText
+Name=CraftyText
 Comment=Next generation markdown editor
-Exec=marktext %F
+Exec=craftytext %F
 Terminal=false
 Type=Application
-Icon=marktext
+Icon=craftytext
 Categories=Office;TextEditor;Utility;
 MimeType=text/markdown;
-Keywords=marktext;
-StartupWMClass=marktext
+Keywords=craftytext;
+StartupWMClass=craftytext
 Actions=NewWindow;
 
 [Desktop Action NewWindow]
 Name=New Window
-Exec=marktext --new-window %F
-Icon=marktext
+Exec=craftytext --new-window %F
+Icon=craftytext

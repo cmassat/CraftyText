@@ -8,7 +8,7 @@ import { DOWNLOAD } from '@/lib/downloads'
 import { GitHubIcon } from '@/components/Icons'
 import { useSidebar } from './sidebar-context'
 
-const STORAGE_KEY = 'marktext-doc-groups'
+const STORAGE_KEY = 'craftytext-doc-groups'
 
 type Props = {
   activeTab: DocTabId
@@ -52,7 +52,7 @@ export default function DocsSidebar({ activeTab, activeHref }: Props) {
       />
       <div className="side-foot">
         <a
-          href={DOWNLOAD.repo + '/tree/develop/packages/website/content/docs'}
+          href={DOWNLOAD.repo + '/tree/main/packages/website/content/docs'}
           target="_blank"
           rel="noopener noreferrer"
         >

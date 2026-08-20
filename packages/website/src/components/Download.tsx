@@ -35,9 +35,7 @@ export default function Download() {
             ))}
           </div>
           <div className="hero-note hero-note--cta">
-            <span>
-              Or install via Homebrew: <code className="inline">brew install --cask mark-text</code>
-            </span>
+            <span>Package manager distribution is not configured for CraftyText yet.</span>
           </div>
         </div>
       </div>

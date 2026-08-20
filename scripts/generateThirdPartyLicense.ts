@@ -7,6 +7,18 @@ const fs = require('fs')
 const thirdPartyChecker = require('./thirdPartyChecker.js')
 const desktopRoot = path.resolve(__dirname, '..', 'packages/desktop')
 
+const getLicenseText = ({ licenseText, licenseFile }) => {
+  if (licenseText) {
+    return licenseText
+  }
+
+  if (licenseFile && fs.existsSync(licenseFile)) {
+    return fs.readFileSync(licenseFile, 'utf8').trim()
+  }
+
+  return 'License text unavailable. See the package metadata for license details.'
+}
+
 thirdPartyChecker.getLicenses(desktopRoot, (err, packages) => {
   if (err) {
     console.log(`[ERROR] ${err}`)
@@ -30,7 +42,8 @@ thirdPartyChecker.getLicenses(desktopRoot, (err, packages) => {
     }
     addedKeys[packageName] = 1
 
-    const { licenses, licenseText } = packages[key]
+    const { licenses } = packages[key]
+    const licenseText = getLicenseText(packages[key])
     summary += `${index++}. ${packageName} (${licenses})\n`
     licenseList += `# ${packageName} (${licenses})
 -------------------------------------------------\
@@ -43,7 +56,7 @@ ${licenseText}
   const output = `# Third Party Notices
 -------------------------------------------------
 
-This file contains all third-party packages that are bundled and shipped with MarkText.
+This file contains all third-party packages that are bundled and shipped with CraftyText.
 
 -------------------------------------------------
 # Summary

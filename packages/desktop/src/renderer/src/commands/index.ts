@@ -632,7 +632,7 @@ const commands: CommandDescriptor[] = [
   },
 
   // --------------------------------------------------------------------------
-  // MarkText
+  // CraftyText
 
   {
     id: 'file.preferences',
@@ -650,7 +650,7 @@ const commands: CommandDescriptor[] = [
     id: 'docs.user-guide',
     execute: async() => {
       window.electron.shell.openExternal(
-        'https://marktext.me/docs/basics'
+        'https://github.com/cmassat/craftytext'
       )
     }
   },
@@ -658,7 +658,7 @@ const commands: CommandDescriptor[] = [
     id: 'docs.markdown-syntax',
     execute: async() => {
       window.electron.shell.openExternal(
-        'https://marktext.me/docs/markdown-syntax'
+        'https://github.com/cmassat/craftytext'
       )
     }
   },
