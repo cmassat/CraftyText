@@ -8,7 +8,7 @@
         class="search-input"
         :placeholder="t('sideBar.search.searchInFolder')"
         @keyup="search"
-      >
+      />
       <div class="controls">
         <span
           :title="t('search.caseSensitive')"
@@ -37,64 +37,33 @@
       </div>
     </div>
 
-    <div
-      v-if="showNoFolderOpenedMessage"
-      class="search-message-section"
-    >
+    <div v-if="showNoFolderOpenedMessage" class="search-message-section">
       <span>{{ t('sideBar.search.noFolderOpen') }}</span>
     </div>
-    <div
-      v-if="showNoResultFoundMessage"
-      class="search-message-section"
-    >
+    <div v-if="showNoResultFoundMessage" class="search-message-section">
       {{ t('sideBar.search.noResultsFound') }}
     </div>
-    <div
-      v-if="searchErrorString"
-      class="search-message-section"
-    >
+    <div v-if="searchErrorString" class="search-message-section">
       {{ searchErrorString }}
     </div>
 
-    <div
-      v-show="showSearchCancelArea"
-      class="cancel-area"
-    >
-      <el-button
-        type="primary"
-        size="mini"
-        @click="cancelSearcher"
-      >
+    <div v-show="showSearchCancelArea" class="cancel-area">
+      <el-button type="primary" size="mini" @click="cancelSearcher">
         {{ t('sideBar.search.cancel') }} <VideoPause />
       </el-button>
     </div>
-    <div
-      v-if="searchResult.length"
-      class="search-result-info"
-    >
+    <div v-if="searchResult.length" class="search-result-info">
       {{ searchResultInfo }}
     </div>
-    <div
-      v-if="searchResult.length"
-      class="search-result-actions"
-    >
-      <button
-        type="button"
-        @click="setSearchResultsExpanded(true)"
-      >
+    <div v-if="searchResult.length" class="search-result-actions">
+      <button type="button" @click="setSearchResultsExpanded(true)">
         {{ t('sideBar.search.expandAll') }}
       </button>
-      <button
-        type="button"
-        @click="setSearchResultsExpanded(false)"
-      >
+      <button type="button" @click="setSearchResultsExpanded(false)">
         {{ t('sideBar.search.collapseAll') }}
       </button>
     </div>
-    <div
-      v-if="searchResult.length"
-      class="search-result"
-    >
+    <div v-if="searchResult.length" class="search-result">
       <search-result-item
         v-for="(item, index) of searchResult"
         :key="index"
@@ -103,18 +72,9 @@
         :expand-all-state="expandAllState"
       />
     </div>
-    <div
-      v-else
-      class="empty"
-    >
+    <div v-else class="empty">
       <div class="no-data">
-        <el-button
-          v-if="showNoFolderOpenedMessage"
-          text
-          bg
-          type="primary"
-          @click="openFolder"
-        >
+        <el-button v-if="showNoFolderOpenedMessage" text bg type="primary" @click="openFolder">
           {{ t('sideBar.search.openFolder') }}
         </el-button>
       </div>
@@ -199,7 +159,7 @@ const search = (): void => {
     return
   }
 
-  const rootDirectoryPaths = projectTrees.value.map(tree => tree.pathname)
+  const rootDirectoryPaths = projectTrees.value.map((tree) => tree.pathname)
 
   if (searcherRunning.value && searcherCancelCallback) {
     searcherCancelCallback()

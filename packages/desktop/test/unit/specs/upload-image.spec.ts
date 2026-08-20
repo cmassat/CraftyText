@@ -19,7 +19,7 @@ beforeEach(() => {
 describe('uploadImage IPC payload shape', () => {
   const docPath = '/tmp/notes/a.md'
 
-  it('forwards a local path string with isPath:true and only the picked prefs', async() => {
+  it('forwards a local path string with isPath:true and only the picked prefs', async () => {
     const source = '/Users/someone/pictures/pic.png'
     const result = await uploadImage(docPath, source, {
       currentUploader: 'picgo',
@@ -35,7 +35,7 @@ describe('uploadImage IPC payload shape', () => {
     expect(result).toBe('https://cdn/x.png')
   })
 
-  it('forwards a binary File with isPath:false and a Uint8Array + name', async() => {
+  it('forwards a binary File with isPath:false and a Uint8Array + name', async () => {
     const file = new File([new Uint8Array([1, 2, 3])], 'pic.png', { type: 'image/png' })
     await uploadImage(docPath, file, { currentUploader: 'picgo', cliScript: '' })
 
@@ -54,7 +54,7 @@ describe('uploadImage IPC payload shape', () => {
     expect(payload.preferences).toEqual({ currentUploader: 'picgo', cliScript: '' })
   })
 
-  it('drops extra prefs keys, keeping only currentUploader and cliScript', async() => {
+  it('drops extra prefs keys, keeping only currentUploader and cliScript', async () => {
     // Simulates being handed the full preferences $state — only the two
     // whitelisted keys may cross the IPC boundary (structured-clone safety).
     const fatPrefs = {
@@ -75,14 +75,14 @@ describe('uploadImage IPC payload shape', () => {
     expect(Object.keys(payload.preferences).sort()).toEqual(['cliScript', 'currentUploader'])
   })
 
-  it('defaults cliScript to an empty string when absent', async() => {
+  it('defaults cliScript to an empty string when absent', async () => {
     await uploadImage(docPath, '/x/y.png', { currentUploader: 'picgo' })
 
     const payload = uploadImageFn.mock.calls[0][0] as { preferences: Record<string, unknown> }
     expect(payload.preferences).toEqual({ currentUploader: 'picgo', cliScript: '' })
   })
 
-  it('returns the uploader-provided URL', async() => {
+  it('returns the uploader-provided URL', async () => {
     uploadImageFn.mockResolvedValueOnce('https://cdn/custom.png')
     const result = await uploadImage(docPath, '/x/y.png', { currentUploader: 'github' })
     expect(result).toBe('https://cdn/custom.png')

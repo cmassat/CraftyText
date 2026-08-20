@@ -19,7 +19,7 @@ describe('withBundledFonts (#3021)', () => {
 
   it('does not duplicate a bundled font already installed on the system', () => {
     const result = withBundledFonts(['Open Sans', 'Arial'], false)
-    expect(result.filter(f => f === 'Open Sans')).toHaveLength(1)
+    expect(result.filter((f) => f === 'Open Sans')).toHaveLength(1)
   })
 
   it('exposes the bundled names so they stay in sync with @font-face', () => {

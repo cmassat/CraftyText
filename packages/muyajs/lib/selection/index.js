@@ -31,9 +31,12 @@ const clampLegalOffset = (node, offset) => {
   if (!node || typeof offset !== 'number' || !Number.isFinite(offset) || offset < 0) {
     return 0
   }
-  const max = node.nodeType === Node.TEXT_NODE
-    ? (node.length != null ? node.length : (node.textContent || '').length)
-    : node.childNodes.length
+  const max =
+    node.nodeType === Node.TEXT_NODE
+      ? node.length != null
+        ? node.length
+        : (node.textContent || '').length
+      : node.childNodes.length
   return Math.min(offset, max)
 }
 
@@ -202,7 +205,7 @@ class Selection {
 
   // Utility method called from importSelection only
   importSelectionMoveCursorPastAnchor(selectionState, range) {
-    const nodeInsideAnchorTagFunction = function(node) {
+    const nodeInsideAnchorTagFunction = function (node) {
       return node.nodeName.toLowerCase() === 'a'
     }
     if (

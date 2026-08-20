@@ -1,6 +1,13 @@
 import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-import { addFile, unlinkFile, addDirectory, unlinkDirectory, resortTree, updateFileMtime } from './treeCtrl'
+import {
+  addFile,
+  unlinkFile,
+  addDirectory,
+  unlinkDirectory,
+  resortTree,
+  updateFileMtime
+} from './treeCtrl'
 import { usePreferencesStore } from './preferences'
 import bus from '../bus'
 import { create, paste, rename, type FileCreateType, type PasteOptions } from '../util/fileSystem'
@@ -45,7 +52,7 @@ const createProjectRoot = (pathname: string): ProjectTree | null => {
 
 interface BufferedProjectState {
   rootDirectories: string[]
-  rootDirectory: string  // first directory; read by the main process at restore time
+  rootDirectory: string // first directory; read by the main process at restore time
 }
 
 const createBufferedProjectState = (state: unknown): BufferedProjectState => {
@@ -120,7 +127,7 @@ export const useProjectStore = defineStore('project', () => {
     // Dedup: don't add the same directory twice.
     const normalized = normalizeProjectRoot(pathname)
     if (!normalized) return
-    if (projectTrees.value.some(t => t.pathname === normalized)) return
+    if (projectTrees.value.some((t) => t.pathname === normalized)) return
 
     const tree = createProjectRoot(pathname)
     if (!tree) return
@@ -158,7 +165,7 @@ export const useProjectStore = defineStore('project', () => {
     { scheduleBufferUpdate = true }: OpenProjectOptions = {}
   ): void {
     const normalized = normalizeProjectRoot(pathname)
-    projectTrees.value = projectTrees.value.filter(t => t.pathname !== normalized)
+    projectTrees.value = projectTrees.value.filter((t) => t.pathname !== normalized)
     // Notify main so it clears _openedRootDirectory and stops watching. Without
     // this, openFolder's isSamePathSync guard would silently skip re-opening the
     // same folder after the user closes and tries to reopen it from the sidebar.
@@ -169,7 +176,7 @@ export const useProjectStore = defineStore('project', () => {
   }
 
   function CREATE_BUFFERED_STATE(): BufferedProjectState {
-    const dirs = projectTrees.value.map(t => t.pathname)
+    const dirs = projectTrees.value.map((t) => t.pathname)
     return createBufferedProjectState({
       rootDirectories: dirs,
       rootDirectory: dirs[0] ?? ''
@@ -214,7 +221,7 @@ export const useProjectStore = defineStore('project', () => {
       pathname: window.path.normalize(change.pathname)
     }
     const key = `${type}:${normalizedChange.pathname}`
-    const existingIndex = pendingTreeEvents.value.findIndex(event => event.key === key)
+    const existingIndex = pendingTreeEvents.value.findIndex((event) => event.key === key)
     const event = { type, change: normalizedChange, key }
     if (existingIndex !== -1) {
       pendingTreeEvents.value.splice(existingIndex, 1, event)
@@ -223,10 +230,7 @@ export const useProjectStore = defineStore('project', () => {
 
     pendingTreeEvents.value.push(event)
     if (pendingTreeEvents.value.length > PENDING_TREE_EVENT_LIMIT) {
-      pendingTreeEvents.value.splice(
-        0,
-        pendingTreeEvents.value.length - PENDING_TREE_EVENT_LIMIT
-      )
+      pendingTreeEvents.value.splice(0, pendingTreeEvents.value.length - PENDING_TREE_EVENT_LIMIT)
     }
   }
 
@@ -252,7 +256,12 @@ export const useProjectStore = defineStore('project', () => {
     switch (type) {
       case 'add': {
         const { pathname, data, isMarkdown } = change
-        addFile(tree, change as Parameters<typeof addFile>[1], String(preferencesStore.fileSortBy), String(preferencesStore.fileSortOrder))
+        addFile(
+          tree,
+          change as Parameters<typeof addFile>[1],
+          String(preferencesStore.fileSortBy),
+          String(preferencesStore.fileSortOrder)
+        )
         if (isMarkdown && newFileNameCache.value && pathname === newFileNameCache.value) {
           const fileState = getFileStateFromData(data as Record<string, unknown>)
           editorStore.UPDATE_CURRENT_FILE(fileState)
@@ -272,7 +281,12 @@ export const useProjectStore = defineStore('project', () => {
         break
       case 'change':
         if (change?.mtimeMs !== undefined) {
-          updateFileMtime(tree, change as Parameters<typeof updateFileMtime>[1], String(preferencesStore.fileSortBy), String(preferencesStore.fileSortOrder))
+          updateFileMtime(
+            tree,
+            change as Parameters<typeof updateFileMtime>[1],
+            String(preferencesStore.fileSortBy),
+            String(preferencesStore.fileSortOrder)
+          )
         }
         break
       default:

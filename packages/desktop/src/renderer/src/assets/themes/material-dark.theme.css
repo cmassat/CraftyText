@@ -120,7 +120,8 @@
   --float-bg-color: var(--floatBgColor);
   --float-hover-color: var(--floatHoverColor);
   --float-border-color: var(--floatBorderColor);
-  --float-shadow: rgb(15 15 15 / 3%) 0 0 0 1px, rgb(15 15 15 / 4%) 0 3px 6px, rgb(15 15 15 / 5%) 0 9px 24px;
+  --float-shadow:
+    rgb(15 15 15 / 3%) 0 0 0 1px, rgb(15 15 15 / 4%) 0 3px 6px, rgb(15 15 15 / 5%) 0 9px 24px;
   --link-color: var(--linkColor);
   --h1-color: var(--h1Color);
   --h2-color: var(--h2Color);

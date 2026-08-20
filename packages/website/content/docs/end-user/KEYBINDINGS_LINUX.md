@@ -21,7 +21,7 @@ CraftyText key bindings for Linux. Please see [general key bindings](KEYBINDINGS
 | `file.preferences`     | <kbd>Ctrl</kbd>+<kbd>,</kbd>                  | Open settings window                  |
 | `file.close-tab`       | <kbd>Ctrl</kbd>+<kbd>W</kbd>                  | Close tab                             |
 | `file.close-window`    | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>W</kbd> | Close window                          |
-| `file.quit`            | <kbd>Ctrl</kbd>+<kbd>Q</kbd>                  | Quit CraftyText                         |
+| `file.quit`            | <kbd>Ctrl</kbd>+<kbd>Q</kbd>                  | Quit CraftyText                       |
 
 #### Edit menu
 

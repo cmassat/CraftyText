@@ -35,7 +35,13 @@ describe('useEditorStore LISTEN_FOR_FILE_CHANGE — content-identical change (#1
   })
 
   const makeSavedTab = (store: ReturnType<typeof useEditorStore>) => {
-    const tab = { id: 'tab-1', filename: 'a.md', pathname: '/x/a.md', markdown: 'hello', isSaved: true }
+    const tab = {
+      id: 'tab-1',
+      filename: 'a.md',
+      pathname: '/x/a.md',
+      markdown: 'hello',
+      isSaved: true
+    }
     store.tabs = [tab] as unknown as typeof store.tabs
     store.tabIdToIndex = { 'tab-1': 0 }
     return tab
@@ -43,7 +49,8 @@ describe('useEditorStore LISTEN_FOR_FILE_CHANGE — content-identical change (#1
 
   const captureHandler = () => {
     const onMock = window.electron.ipcRenderer.on as Mock
-    const call = onMock.mock.calls.find((c) => c[0] === 'mt::update-file')!
+    const call = onMock.mock.calls.find((c) => c[0] === 'mt::update-file')
+    if (!call) throw new Error('mt::update-file handler not registered')
     return call[1] as (e: unknown, payload: unknown) => void
   }
 

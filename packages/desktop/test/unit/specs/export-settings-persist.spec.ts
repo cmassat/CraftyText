@@ -19,7 +19,12 @@ describe('#2287 — export settings persistence', () => {
 
   it('round-trips saved settings through localStorage', () => {
     saveExportSettings({ pageSize: 'A3', fontSize: 18, pageMarginTop: 30, theme: 'liber' })
-    expect(loadExportSettings()).toEqual({ pageSize: 'A3', fontSize: 18, pageMarginTop: 30, theme: 'liber' })
+    expect(loadExportSettings()).toEqual({
+      pageSize: 'A3',
+      fontSize: 18,
+      pageMarginTop: 30,
+      theme: 'liber'
+    })
   })
 
   it('returns an empty object when nothing was saved', () => {

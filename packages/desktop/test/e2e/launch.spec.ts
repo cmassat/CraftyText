@@ -6,17 +6,17 @@ test.describe('Check Launch CraftyText', () => {
   let app: ElectronApplication
   let page: Page
 
-  test.beforeAll(async() => {
+  test.beforeAll(async () => {
     const { app: electronApp, page: firstPage } = await launchElectron()
     app = electronApp
     page = firstPage
   })
 
-  test.afterAll(async() => {
+  test.afterAll(async () => {
     await app.close()
   })
 
-  test('Empty CraftyText', async() => {
+  test('Empty CraftyText', async () => {
     const title = await page.title()
     expect(/^CraftyText|Untitled-1 - CraftyText$/.test(title)).toBeTruthy()
   })

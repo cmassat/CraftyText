@@ -16,7 +16,9 @@ type ErrorType = 'main' | 'renderer'
 type Logger = (s: string) => void
 
 const EXIT_ON_ERROR = !!(process.env.CRAFTYTEXT_EXIT_ON_ERROR || process.env.MARKTEXT_EXIT_ON_ERROR)
-const SHOW_ERROR_DIALOG = !(process.env.CRAFTYTEXT_ERROR_INTERACTION || process.env.MARKTEXT_ERROR_INTERACTION)
+const SHOW_ERROR_DIALOG = !(
+  process.env.CRAFTYTEXT_ERROR_INTERACTION || process.env.MARKTEXT_ERROR_INTERACTION
+)
 const ERROR_MSG_MAIN = (): string => t('error.unexpectedMainProcess')
 const ERROR_MSG_RENDERER = (): string => t('error.unexpectedRendererProcess')
 
@@ -46,7 +48,7 @@ const exceptionToString = (error: Error, type: ErrorType): string => {
   )
 }
 
-const handleError = async(title: string, error: Error, type: ErrorType): Promise<void> => {
+const handleError = async (title: string, error: Error, type: ErrorType): Promise<void> => {
   const { message, stack } = error
 
   // Write error into file
@@ -59,10 +61,7 @@ const handleError = async(title: string, error: Error, type: ErrorType): Promise
     process.exit(1)
     // eslint, don't lie to me, the return statement is important!
     return
-  } else if (
-    !SHOW_ERROR_DIALOG ||
-    (isStableRelease() && type === 'renderer')
-  ) {
+  } else if (!SHOW_ERROR_DIALOG || (isStableRelease() && type === 'renderer')) {
     return
   }
 

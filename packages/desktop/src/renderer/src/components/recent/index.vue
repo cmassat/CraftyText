@@ -2,12 +2,7 @@
   <div class="recent-files-projects">
     <div class="centered-group">
       {{ t('recent.noTabsOpen') }}
-      <el-button
-        text
-        bg
-        type="primary"
-        @click="newFile"
-      >
+      <el-button text bg type="primary" @click="newFile">
         {{ t('recent.newFile') }}
       </el-button>
     </div>

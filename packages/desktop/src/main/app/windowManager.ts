@@ -76,10 +76,7 @@ interface AppMenuLike {
 }
 
 interface EditorBufferStoreLike {
-  handleClose(
-    restoreBufferId: string | undefined,
-    windows: { id: number; win: BaseWindow }[]
-  ): void
+  handleClose(restoreBufferId: string | undefined, windows: { id: number; win: BaseWindow }[]): void
 }
 
 class WindowManager extends TypedEmitter<WindowManagerEvents> {
@@ -282,9 +279,10 @@ class WindowManager extends TypedEmitter<WindowManagerEvents> {
     }
 
     const buf: { windowId: number | null; fileList: string[] }[] = []
-    const len = filePathScores!.length
+    if (!filePathScores) return buf
+    const len = filePathScores.length
     for (let i = 0; i < len; ++i) {
-      let { id: windowId, score } = filePathScores![i]
+      let { id: windowId, score } = filePathScores[i]
 
       if (score === -1) {
         // Skip files that already opened.

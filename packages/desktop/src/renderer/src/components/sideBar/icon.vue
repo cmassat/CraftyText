@@ -16,9 +16,7 @@ const getClassByName = (name: string): string | null => {
 }
 
 const className = computed<string[]>(() => {
-  let classNames: string | null | undefined = getClassByName(
-    props.name ? props.name : 'mock.md'
-  )
+  let classNames: string | null | undefined = getClassByName(props.name ? props.name : 'mock.md')
 
   if (!classNames) {
     // Use fallback icon when the icon is unknown.
@@ -29,10 +27,7 @@ const className = computed<string[]>(() => {
 </script>
 
 <template>
-  <span
-    :class="className"
-    class="file-icon"
-  />
+  <span :class="className" class="file-icon" />
 </template>
 
 <style scoped>

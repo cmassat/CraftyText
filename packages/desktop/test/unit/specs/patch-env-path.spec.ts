@@ -38,7 +38,7 @@ describe('patchEnvPath (#2751)', () => {
     patchEnvPath()
     const homebrew = (process.env.PATH ?? '')
       .split(path.delimiter)
-      .filter(d => d === '/opt/homebrew/bin')
+      .filter((d) => d === '/opt/homebrew/bin')
     expect(homebrew).toHaveLength(1)
   })
 

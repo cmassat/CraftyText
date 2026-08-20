@@ -112,8 +112,8 @@ CraftyText هو محرر Markdown مفتوح المصدر يعتمد على دع
 **الراعي المميز**
 
 | [<img src="../assets/sponsors/serpapi.png" width="150">](https://serpapi.com/?utm_source=craftytext) | [استخرج نتائج Google ومحركات البحث الأخرى من خلال واجهة برمجية سريعة وسهلة وشاملة.](https://serpapi.com/?utm_source=craftytext) |
-| ------------- |:-------------|
-| [<img src="../assets/sponsors/ukey.png" width="150">](https://www.ukey.com) | [Secure hardware wallet made simple.](https://www.ukey.com) |
+| ---------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| [<img src="../assets/sponsors/ukey.png" width="150">](https://www.ukey.com)                          | [Secure hardware wallet made simple.](https://www.ukey.com)                                                                     |
 
 ## لقطة شاشة
 
@@ -134,8 +134,8 @@ CraftyText هو محرر Markdown مفتوح المصدر يعتمد على دع
 
 ![المنصة](https://img.shields.io/static/v1.svg?label=Platform&message=Linux-64%20|%20macOS-64%20|%20Win-32%20|%20Win-64&style=for-the-badge)
 
-| ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/mac-pass-sm.png)                                                                                                  | ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/windows-pass-sm.png)                                                                                                          | ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/linux-pass-sm.png)                                                                                                                        |
-|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/mac-pass-sm.png)                                                |                                                ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/windows-pass-sm.png)                                                |                                                       ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/linux-pass-sm.png)                                                       |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-x64.dmg.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-x64.dmg) | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-setup.exe.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-setup.exe) | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-x86_64.AppImage.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-x86_64.AppImage) |
 
 هل تريد الاطلاع على الميزات الجديدة لأحدث إصدار؟ يرجى الرجوع إلى [CHANGELOG](../CHANGELOG.md).
@@ -184,7 +184,6 @@ CraftyText هو محرر Markdown مفتوح المصدر يعتمد على دع
 ## المساهمة
 
 CraftyText قيد التطوير، يرجى التأكد من قراءة [دليل المساهمة](../../.github/CONTRIBUTING.md) قبل إنشاء طلب دمج. هل تريد إضافة ميزات إلى CraftyText؟ راجع [خارطة الطريق](https://github.com/cmassat/craftytext/projects) والمشكلات المفتوحة.
-
 
 ## المساهمون
 

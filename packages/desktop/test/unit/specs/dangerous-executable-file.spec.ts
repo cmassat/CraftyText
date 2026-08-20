@@ -31,7 +31,13 @@ describe('#3575 — isDangerousExecutableFile', () => {
   })
 
   it('flags macOS and Linux launchers, not just Windows', () => {
-    for (const name of ['run.command', 'Foo.app', 'launch.desktop', 'App.AppImage', 'installer.run']) {
+    for (const name of [
+      'run.command',
+      'Foo.app',
+      'launch.desktop',
+      'App.AppImage',
+      'installer.run'
+    ]) {
       expect(isDangerousExecutableFile(name)).toBe(true)
     }
   })
@@ -50,7 +56,14 @@ describe('#3575 — isDangerousExecutableFile', () => {
   })
 
   it('does not flag documents, images or markdown', () => {
-    for (const name of ['note.md', 'photo.png', 'data.json', 'readme.txt', 'archive.zip', 'index.html']) {
+    for (const name of [
+      'note.md',
+      'photo.png',
+      'data.json',
+      'readme.txt',
+      'archive.zip',
+      'index.html'
+    ]) {
       expect(isDangerousExecutableFile(name)).toBe(false)
     }
   })

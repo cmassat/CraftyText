@@ -54,11 +54,7 @@ class AppMenu {
    * @param keybindings The keybindings instances.
    * @param userDataPath The user data path.
    */
-  constructor(
-    preferences: Preference,
-    keybindings: Keybindings,
-    userDataPath: string
-  ) {
+  constructor(preferences: Preference, keybindings: Keybindings, userDataPath: string) {
     this._preferences = preferences
     this._keybindings = keybindings
     this._userDataPath = userDataPath
@@ -187,8 +183,9 @@ class AppMenu {
     const { windowMenus } = this
     windowMenus.set(window.id, this._buildEditorMenu())
 
-    const entry = windowMenus.get(window.id)!
-    const menu = entry.menu!
+    const entry = windowMenus.get(window.id)
+    if (!entry?.menu) return
+    const menu = entry.menu
 
     // Set source-code editor if preferred.
     const sourceCodeModeMenuItem = menu.getMenuItemById('sourceCodeModeMenuItem')
@@ -530,7 +527,7 @@ class AppMenu {
       this.clearRecentlyUsedDocuments()
     })
 
-    onInternalChannel('broadcast-preferences-changed', async(prefs: Partial<IUserPreferences>) => {
+    onInternalChannel('broadcast-preferences-changed', async (prefs: Partial<IUserPreferences>) => {
       if (prefs.theme !== undefined || prefs.followSystemTheme !== undefined) {
         this.updateAppMenu()
       }

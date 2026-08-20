@@ -46,7 +46,7 @@ const collapseNode = (page: Page, label: string): Promise<void> =>
     icon.click()
   }, label)
 
-const ensureSidebarVisible = async(app: ElectronApplication, page: Page): Promise<void> => {
+const ensureSidebarVisible = async (app: ElectronApplication, page: Page): Promise<void> => {
   const visible = await page.evaluate(() => {
     const el = document.querySelector('.side-bar') as HTMLElement | null
     return !!(el && el.offsetParent !== null)
@@ -68,7 +68,7 @@ test.describe('TOC collapse state survives edits (#3028)', () => {
   let app: ElectronApplication
   let page: Page
 
-  test.beforeAll(async() => {
+  test.beforeAll(async () => {
     const launched = await launchWithMarkdown(INITIAL_DOC)
     app = launched.app
     page = launched.page
@@ -83,19 +83,19 @@ test.describe('TOC collapse state survives edits (#3028)', () => {
     )
   })
 
-  test.afterAll(async() => {
+  test.afterAll(async () => {
     if (app) await app.close()
   })
 
-  test('a collapsed heading stays collapsed after a content edit', async() => {
+  test('a collapsed heading stays collapsed after a content edit', async () => {
     // Everything expanded initially.
-    await expect.poll(() => readVisibleTocLabels(page), { timeout: 8000 })
+    await expect
+      .poll(() => readVisibleTocLabels(page), { timeout: 8000 })
       .toEqual(['A', 'B', 'B1', 'C'])
 
     // Collapse "B": its child "B1" disappears.
     await collapseNode(page, 'B')
-    await expect.poll(() => readVisibleTocLabels(page), { timeout: 5000 })
-      .toEqual(['A', 'B', 'C'])
+    await expect.poll(() => readVisibleTocLabels(page), { timeout: 5000 }).toEqual(['A', 'B', 'C'])
 
     // Edit a different heading ("C" -> "C2"), triggering UPDATE_TOC.
     const cContent = page
@@ -107,7 +107,6 @@ test.describe('TOC collapse state survives edits (#3028)', () => {
     await page.keyboard.type('2', { delay: 20 })
 
     // After the live TOC update, "B" must still be collapsed (B1 hidden).
-    await expect.poll(() => readVisibleTocLabels(page), { timeout: 8000 })
-      .toEqual(['A', 'B', 'C2'])
+    await expect.poll(() => readVisibleTocLabels(page), { timeout: 8000 }).toEqual(['A', 'B', 'C2'])
   })
 })

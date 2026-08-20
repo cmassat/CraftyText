@@ -1,7 +1,9 @@
 export const DOWNLOAD = {
   mac: 'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-mac-x64-latest.dmg',
-  windows: 'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-win-x64-latest-setup.exe',
-  linux: 'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-linux-latest.AppImage',
+  windows:
+    'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-win-x64-latest-setup.exe',
+  linux:
+    'https://github.com/cmassat/craftytext/releases/latest/download/craftytext-linux-latest.AppImage',
   releases: 'https://github.com/cmassat/craftytext/releases',
   repo: 'https://github.com/cmassat/craftytext',
   contributing: 'https://github.com/cmassat/craftytext/blob/main/.github/CONTRIBUTING.md',

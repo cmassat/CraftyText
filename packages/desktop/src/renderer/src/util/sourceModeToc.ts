@@ -1,7 +1,7 @@
 /** Minimal CodeMirror surface `scrollSourceEditorToLine` needs. */
 interface ISourceEditor {
   setCursor: (
-    pos: { line: number, ch: number },
+    pos: { line: number; ch: number },
     ch?: number | null,
     options?: { scroll?: boolean }
   ) => void

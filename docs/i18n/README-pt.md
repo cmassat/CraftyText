@@ -112,8 +112,8 @@ CraftyText é um editor Markdown de código aberto impulsionado pelo apoio de su
 **Patrocinador Especial**
 
 | [<img src="../assets/sponsors/serpapi.png" width="150">](https://serpapi.com/?utm_source=craftytext) | [Extraia dados do Google e de outros mecanismos de busca com nossa API rápida, fácil e completa.](https://serpapi.com/?utm_source=craftytext) |
-| ------------- |:-------------|
-| [<img src="../assets/sponsors/ukey.png" width="150">](https://www.ukey.com) | [Secure hardware wallet made simple.](https://www.ukey.com) |
+| ---------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| [<img src="../assets/sponsors/ukey.png" width="150">](https://www.ukey.com)                          | [Secure hardware wallet made simple.](https://www.ukey.com)                                                                                   |
 
 ## Capturas de tela
 
@@ -134,8 +134,8 @@ CraftyText é um editor Markdown de código aberto impulsionado pelo apoio de su
 
 ![Plataforma](https://img.shields.io/static/v1.svg?label=Platform&message=Linux-64%20|%20macOS-64%20|%20Win-32%20|%20Win-64&style=for-the-badge)
 
-| ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/mac-pass-sm.png)                                                                                                  | ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/windows-pass-sm.png)                                                                                                          | ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/linux-pass-sm.png)                                                                                                                        |
-|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/mac-pass-sm.png)                                                |                                                ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/windows-pass-sm.png)                                                |                                                       ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/linux-pass-sm.png)                                                       |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-x64.dmg.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-x64.dmg) | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-setup.exe.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-setup.exe) | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-x86_64.AppImage.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-x86_64.AppImage) |
 
 Quer ver os novos recursos da última versão? Consulte o [CHANGELOG](../CHANGELOG.md).
@@ -184,7 +184,6 @@ Se você tiver alguma dúvida sobre o CraftyText, fique à vontade para abrir um
 ## Contribuição
 
 CraftyText está em desenvolvimento. Por favor leia o [Guia de Contribuição](../../.github/CONTRIBUTING.md) antes de fazer um pull request. Quer adicionar recursos ao CraftyText? Consulte nosso [roadmap](https://github.com/cmassat/craftytext/projects) e issues abertas.
-
 
 ## Colaboradores
 

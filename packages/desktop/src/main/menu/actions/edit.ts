@@ -1,5 +1,5 @@
 import path from 'path'
-import { BrowserWindow, ipcMain, type Menu, type MenuItem } from 'electron'
+import { BrowserWindow, ipcMain, type Menu } from 'electron'
 import log from 'electron-log'
 import { COMMANDS } from '../../commands'
 import type { CommandManager } from '../../commands'
@@ -160,6 +160,7 @@ export const loadEditCommands = (commandManager: CommandManager): void => {
 //       window id from `AppMenu` manager.
 
 export const updateSidebarMenu = (applicationMenu: Menu, value: unknown): void => {
-  const sideBarMenuItem: MenuItem = applicationMenu.getMenuItemById('sideBarMenuItem')!
+  const sideBarMenuItem = applicationMenu.getMenuItemById('sideBarMenuItem')
+  if (!sideBarMenuItem) return
   sideBarMenuItem.checked = !!value
 }

@@ -113,8 +113,8 @@ CraftyText はコミュニティの支援によって成り立つオープンソ
 **スペシャルスポンサー**
 
 | [<img src="../assets/sponsors/serpapi.png" width="150">](https://serpapi.com/?utm_source=craftytext) | [高速で使いやすく完全な API で Google や他の検索エンジンからデータを取得できます。](https://serpapi.com/?utm_source=craftytext) |
-| ------------- |:-------------|
-| [<img src="../assets/sponsors/ukey.png" width="150">](https://www.ukey.com) | [Secure hardware wallet made simple.](https://www.ukey.com) |
+| ---------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| [<img src="../assets/sponsors/ukey.png" width="150">](https://www.ukey.com)                          | [Secure hardware wallet made simple.](https://www.ukey.com)                                                                     |
 
 ## スクリーンショット
 
@@ -135,8 +135,8 @@ CraftyText はコミュニティの支援によって成り立つオープンソ
 
 ![プラットフォーム](https://img.shields.io/static/v1.svg?label=Platform&message=Linux-64%20|%20macOS-64%20|%20Win-32%20|%20Win-64&style=for-the-badge)
 
-| ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/mac-pass-sm.png)                                                                                                  | ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/windows-pass-sm.png)                                                                                                          | ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/linux-pass-sm.png)                                                                                                                        |
-|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/mac-pass-sm.png)                                                |                                                ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/windows-pass-sm.png)                                                |                                                       ![](https://raw.githubusercontent.com/wiki/ryanoasis/nerd-fonts/screenshots/v1.0.x/linux-pass-sm.png)                                                       |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-x64.dmg.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-x64.dmg) | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-setup.exe.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-setup.exe) | [![latest version](https://img.shields.io/github/downloads/cmassat/craftytext/latest/craftytext-x86_64.AppImage.svg)](https://github.com/cmassat/craftytext/releases/download/v0.17.1/craftytext-x86_64.AppImage) |
 
 最新バージョンの新機能を確認しますか？[CHANGELOG](../CHANGELOG.md) をご覧ください。
@@ -185,7 +185,6 @@ CraftyText に関してご質問がある場合は、issue を作成していた
 ## コントリビューション
 
 CraftyText は開発中です。プルリクエストを作成する前に必ず[コントリビューションガイド](../../.github/CONTRIBUTING.md)をお読みください。CraftyText に機能を追加したい場合は、[ロードマップ](https://github.com/cmassat/craftytext/projects)とオープン issue をご確認ください。
-
 
 ## コントリビューター
 

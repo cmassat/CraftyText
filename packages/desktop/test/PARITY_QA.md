@@ -34,6 +34,7 @@ desktop assets-folder / upload persistence behind `imageAction`. Verify those by
 hand:
 
 ### Steps — local image file
+
 1. Open a document (ideally a saved `.md` so assets-folder behaviour applies).
 2. From the OS file manager, drag a `.png` / `.jpg` file over the editor body
    and drop it inside a paragraph.
@@ -49,12 +50,14 @@ original absolute path).
 > the insert-action preference is ignored.
 
 ### Steps — web-link image
+
 1. In a browser, drag an image (or its URL) over the editor and drop it.
 
 **Expected (after fix):** `![](<url>)` is inserted and the image renders. (This
 path needs no desktop wiring — it works as soon as the engine handler ships.)
 
 ### Desktop wave-2 wiring required
+
 The engine now reads two new `IMuyaOptions` hooks for the local-file path:
 `imageAction({ src, alt, title }) => Promise<string>` (persist per insert
 preference) and `getPathForFile(file) => string` (resolve a dropped `File` to a
@@ -75,6 +78,7 @@ passing** in
 integration can only be verified by hand and stays manual.
 
 ### Steps — browser "Copy Image"
+
 1. In a browser, right-click an image → **Copy Image** (puts a bitmap, not a
    file path, on the clipboard).
 2. Focus the editor and paste (Cmd/Ctrl+V).
@@ -85,6 +89,7 @@ persisted per the insert-action preference.
 **Current (gap):** nothing is inserted.
 
 ### Steps — macOS screenshot integration
+
 1. macOS only. Trigger the in-app screenshot capture (Function/menu that runs
    `screencapture -i -c`), select a region.
 2. The captured bitmap lands on the clipboard and the app auto-pastes it.

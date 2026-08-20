@@ -1,8 +1,5 @@
 <template>
-  <div
-    ref="sourceCodeContainer"
-    class="source-code"
-  />
+  <div ref="sourceCodeContainer" class="source-code" />
 </template>
 
 <script setup lang="ts">
@@ -312,7 +309,7 @@ const listenChange = () => {
 // CodeMirror instead. Resolve the TOC entry to its heading line in the source.
 const handleScrollToHeader = (slug: unknown) => {
   if (!editor.value) return
-  const index = editorStore.listToc.findIndex(item => item.slug === slug)
+  const index = editorStore.listToc.findIndex((item) => item.slug === slug)
   if (index < 0) return
   const line = findMarkdownHeadingLine(editor.value.getValue(), index)
   if (line < 0) return
@@ -341,7 +338,7 @@ onMounted(() => {
     styleActiveLine: true,
     direction: textDirection,
     viewportMargin: Infinity,
-    lineNumberFormatter (line: number) {
+    lineNumberFormatter(line: number) {
       if (line % 10 === 0 || line === 1) {
         return line
       } else {

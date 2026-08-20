@@ -12,6 +12,7 @@ git clone https://github.com/cmassat/craftytext.git
 
 The easiest way to build CraftyText on Linux is from inside a container.
 Here are the steps for doing so:
+
 ```sh
 # cd to craftytext repository
 
@@ -82,18 +83,19 @@ Copy the build app to applications folder, or if on Windows run the executable i
 $ pnpm run <script>
 ```
 
-| Script  | Description                                      |
-| ------- | ------------------------------------------------ |
+| Script  | Description                                        |
+| ------- | -------------------------------------------------- |
 | `build` | Build CraftyText binaries and packages for your OS |
 | `dev`   | Build and run CraftyText in developer mode         |
-| `lint`  | Lint code style                                  |
-| `test`  | Run unit tests                                   |
+| `lint`  | Lint code style                                    |
+| `test`  | Run unit tests                                     |
 
 For more scripts please see `package.json`.
 
->[!TIP]
->To improve efficiency during development:
+> [!TIP]
+> To improve efficiency during development:
+>
 > 1. Use `pnpm run dev` for development mode. This will automatically reload the window when source code is modified.
 > 2. Use `Ctrl+R` to manually reload the application in development mode if needed.
-> 
+>
 > This approach bypasses unnecessary rebuilds and optimizes the developer workflow. However, for CI or release builds, a full rebuild may still be necessary.

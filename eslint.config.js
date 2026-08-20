@@ -1,4 +1,5 @@
 import eslintJs from '@eslint/js'
+import eslintConfigPrettier from 'eslint-config-prettier'
 import pluginVue from 'eslint-plugin-vue'
 import pluginHtml from 'eslint-plugin-html'
 import pluginI18nJson from 'eslint-plugin-i18n-json'
@@ -212,5 +213,6 @@ export default [
         }
       ]
     }
-  }
+  },
+  eslintConfigPrettier
 ]

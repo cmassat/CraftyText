@@ -14,7 +14,7 @@ describe('findMarkdownHeadingLine', () => {
     'Setext', // 6
     '------', // 7  (setext h2 underline for line 6)
     '', // 8
-    '### Third', // 9
+    '### Third' // 9
   ].join('\n')
 
   it('finds the line of the N-th heading (ATX + setext, in order)', () => {
@@ -39,7 +39,7 @@ describe('findMarkdownHeadingLine', () => {
       '---', // 5
       '```', // 6
       '', // 7
-      '## AlsoReal', // 8
+      '## AlsoReal' // 8
     ].join('\n')
     expect(findMarkdownHeadingLine(fenced, 0)).toBe(0)
     expect(findMarkdownHeadingLine(fenced, 1)).toBe(8)

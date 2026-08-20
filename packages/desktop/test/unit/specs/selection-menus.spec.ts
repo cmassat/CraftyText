@@ -90,7 +90,13 @@ describe('updateSelectionMenus', () => {
 
     // Paragraph: only code/quote/ordered/bullet/task are actionable across blocks.
     expect(enabledIds(menu.paragraphItems).sort()).toEqual(
-      ['bulletListMenuItem', 'codeFencesMenuItem', 'orderListMenuItem', 'quoteBlockMenuItem', 'taskListMenuItem'].sort()
+      [
+        'bulletListMenuItem',
+        'codeFencesMenuItem',
+        'orderListMenuItem',
+        'quoteBlockMenuItem',
+        'taskListMenuItem'
+      ].sort()
     )
 
     // Format: only link/image are disabled.
@@ -111,11 +117,11 @@ describe('updateSelectionMenus', () => {
     expect(menu.formatItems.every((i) => i.enabled === false)).toBe(true)
 
     // Paragraph submenu is disabled wholesale by isCodeFences...
-    const paraItem = (id: string) => menu.paragraphItems.find((i) => i.id === id)!
-    expect(paraItem('paragraphMenuItem').enabled).toBe(false)
-    expect(paraItem('heading1MenuItem').enabled).toBe(false)
+    const paraItem = (id: string) => menu.paragraphItems.find((i) => i.id === id)
+    expect(paraItem('paragraphMenuItem')?.enabled).toBe(false)
+    expect(paraItem('heading1MenuItem')?.enabled).toBe(false)
     // ...except codeFencesMenuItem is re-enabled because affiliation has a code element.
-    expect(paraItem('codeFencesMenuItem').enabled).toBe(true)
+    expect(paraItem('codeFencesMenuItem')?.enabled).toBe(true)
   })
 
   it('disables loose-list-item when the affiliation has neither ul nor ol', () => {
@@ -123,8 +129,8 @@ describe('updateSelectionMenus', () => {
 
     updateSelectionMenus(menu as unknown as Menu, { affiliation: { p: true } })
 
-    const loose = menu.paragraphItems.find((i) => i.id === 'looseListItemMenuItem')!
-    expect(loose.enabled).toBe(false)
+    const loose = menu.paragraphItems.find((i) => i.id === 'looseListItemMenuItem')
+    expect(loose?.enabled).toBe(false)
   })
 
   it('keeps loose-list-item enabled when the affiliation is a list (ul/ol)', () => {
@@ -132,8 +138,8 @@ describe('updateSelectionMenus', () => {
 
     updateSelectionMenus(menu as unknown as Menu, { affiliation: { ul: true } })
 
-    const loose = menu.paragraphItems.find((i) => i.id === 'looseListItemMenuItem')!
-    expect(loose.enabled).toBe(true)
+    const loose = menu.paragraphItems.find((i) => i.id === 'looseListItemMenuItem')
+    expect(loose?.enabled).toBe(true)
   })
 
   it('checks the matching paragraph item via the affiliation -> menu id map', () => {
@@ -150,19 +156,25 @@ describe('updateSelectionMenus — front matter', () => {
   it('disables Front Matter when the document already has front matter', () => {
     const menu = makeMenu()
 
-    updateSelectionMenus(menu as unknown as Menu, { affiliation: { p: true }, hasFrontMatter: true })
+    updateSelectionMenus(menu as unknown as Menu, {
+      affiliation: { p: true },
+      hasFrontMatter: true
+    })
 
-    const fm = menu.paragraphItems.find((i) => i.id === 'frontMatterMenuItem')!
-    expect(fm.enabled).toBe(false)
+    const fm = menu.paragraphItems.find((i) => i.id === 'frontMatterMenuItem')
+    expect(fm?.enabled).toBe(false)
   })
 
   it('keeps Front Matter enabled when the document has none', () => {
     const menu = makeMenu()
 
-    updateSelectionMenus(menu as unknown as Menu, { affiliation: { p: true }, hasFrontMatter: false })
+    updateSelectionMenus(menu as unknown as Menu, {
+      affiliation: { p: true },
+      hasFrontMatter: false
+    })
 
-    const fm = menu.paragraphItems.find((i) => i.id === 'frontMatterMenuItem')!
-    expect(fm.enabled).toBe(true)
+    const fm = menu.paragraphItems.find((i) => i.id === 'frontMatterMenuItem')
+    expect(fm?.enabled).toBe(true)
   })
 })
 
@@ -170,7 +182,10 @@ describe('updateSelectionMenus — format disabled in non-formattable blocks', (
   it('disables all format items in a code-fence block even without code content (math/html/frontmatter/diagram)', () => {
     const menu = makeMenu()
 
-    updateSelectionMenus(menu as unknown as Menu, { affiliation: { multiplemath: true }, isCodeFences: true })
+    updateSelectionMenus(menu as unknown as Menu, {
+      affiliation: { multiplemath: true },
+      isCodeFences: true
+    })
 
     expect(menu.formatItems.every((i) => i.enabled === false)).toBe(true)
   })
@@ -178,7 +193,11 @@ describe('updateSelectionMenus — format disabled in non-formattable blocks', (
   it('keeps format items enabled inside a table (disabled paragraph, not code)', () => {
     const menu = makeMenu()
 
-    updateSelectionMenus(menu as unknown as Menu, { affiliation: { figure: true }, isTable: true, isDisabled: true })
+    updateSelectionMenus(menu as unknown as Menu, {
+      affiliation: { figure: true },
+      isTable: true,
+      isDisabled: true
+    })
 
     expect(menu.formatItems.every((i) => i.enabled === true)).toBe(true)
   })
@@ -195,15 +214,20 @@ describe('updateSelectionMenus — list kinds', () => {
 
   it('checks ordered + bullet + task for a nested ol/task/ul affiliation', () => {
     const menu = makeMenu()
-    updateSelectionMenus(menu as unknown as Menu, { affiliation: { ol: true, task: true, ul: true } })
-    const ids = menu.paragraphItems.filter((i) => i.checked).map((i) => i.id).sort()
+    updateSelectionMenus(menu as unknown as Menu, {
+      affiliation: { ol: true, task: true, ul: true }
+    })
+    const ids = menu.paragraphItems
+      .filter((i) => i.checked)
+      .map((i) => i.id)
+      .sort()
     expect(ids).toEqual(['bulletListMenuItem', 'orderListMenuItem', 'taskListMenuItem'].sort())
   })
 
   it('keeps loose-list-item enabled inside a task list', () => {
     const menu = makeMenu()
     updateSelectionMenus(menu as unknown as Menu, { affiliation: { task: true } })
-    const loose = menu.paragraphItems.find((i) => i.id === 'looseListItemMenuItem')!
-    expect(loose.enabled).toBe(true)
+    const loose = menu.paragraphItems.find((i) => i.id === 'looseListItemMenuItem')
+    expect(loose?.enabled).toBe(true)
   })
 })

@@ -11,7 +11,7 @@ test.describe('Find bar prefill from selection', () => {
   let app: ElectronApplication
   let page: Page
 
-  test.beforeAll(async() => {
+  test.beforeAll(async () => {
     const launched = await launchWithMarkdown(
       '# Find test\n\nThe quick brown fox jumps over the lazy dog.\n'
     )
@@ -20,11 +20,11 @@ test.describe('Find bar prefill from selection', () => {
     await focusEditor(page)
   })
 
-  test.afterAll(async() => {
+  test.afterAll(async () => {
     if (app) await app.close()
   })
 
-  test('double-click word prefills the find input and counts matches', async() => {
+  test('double-click word prefills the find input and counts matches', async () => {
     const point = await page.evaluate(() => {
       const paras = Array.from(document.querySelectorAll('.mu-paragraph'))
       for (const para of paras) {

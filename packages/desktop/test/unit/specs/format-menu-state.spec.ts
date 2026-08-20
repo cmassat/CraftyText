@@ -33,7 +33,10 @@ import paragraphTemplate from 'main_renderer/menu/templates/paragraph'
 import editTemplate from 'main_renderer/menu/templates/edit'
 import viewTemplate from 'main_renderer/menu/templates/view'
 
-interface IInlineFormatIcon { type: string, shortcut?: string }
+interface IInlineFormatIcon {
+  type: string
+  shortcut?: string
+}
 
 // Mimic the Electron application menu surface `updateFormatMenu` touches:
 // `getMenuItemById('formatMenuItem')` returning an object whose
@@ -41,8 +44,7 @@ interface IInlineFormatIcon { type: string, shortcut?: string }
 const makeMenu = (ids: string[]) => {
   const items = ids.map((id) => ({ id, checked: false }))
   return {
-    getMenuItemById: (id: string) =>
-      id === 'formatMenuItem' ? { submenu: { items } } : undefined,
+    getMenuItemById: (id: string) => (id === 'formatMenuItem' ? { submenu: { items } } : undefined),
     items
   }
 }
@@ -142,7 +144,10 @@ describe('Format-menu accelerators vs muya inlineFormatToolbar shortcuts', () =>
     if (!raw) return ''
     const mods = new Set<string>()
     let key = ''
-    for (const part of raw.split('+').map((p) => p.trim()).filter(Boolean)) {
+    for (const part of raw
+      .split('+')
+      .map((p) => p.trim())
+      .filter(Boolean)) {
       const lower = part.toLowerCase()
       if (lower === 'ctrl' || lower === 'control' || lower === '⌃') mods.add('ctrl')
       else if (lower === 'cmd' || lower === 'command' || lower === '⌘') mods.add('cmd')
@@ -164,7 +169,17 @@ describe('Format-menu accelerators vs muya inlineFormatToolbar shortcuts', () =>
 
   // strong/em are the requested reconcilable mapping, plus the rest of the set
   // that agrees once notation is normalized.
-  const RECONCILABLE = ['strong', 'em', 'u', 'del', 'mark', 'inline_math', 'link', 'image', 'clear'] as const
+  const RECONCILABLE = [
+    'strong',
+    'em',
+    'u',
+    'del',
+    'mark',
+    'inline_math',
+    'link',
+    'image',
+    'clear'
+  ] as const
 
   it.each(RECONCILABLE)(
     'toolbar shortcut for "%s" matches the Format-menu accelerator (Windows + Linux)',
@@ -294,7 +309,9 @@ describe('menu template accelerators match the platform keybinding tables (Parag
   // values, so a wholesale table edit is caught even if the pass-through holds.
   it('binds the checklist-named ids to their documented platform accelerators', () => {
     expect(referencedIds(paragraphTemplate as unknown as Template)).toContain('paragraph.heading-1')
-    expect(referencedIds(paragraphTemplate as unknown as Template)).toContain('paragraph.front-matter')
+    expect(referencedIds(paragraphTemplate as unknown as Template)).toContain(
+      'paragraph.front-matter'
+    )
     expect(referencedIds(editTemplate as unknown as Template)).toContain('edit.duplicate')
     expect(referencedIds(editTemplate as unknown as Template)).toContain('edit.find-next')
     expect(referencedIds(editTemplate as unknown as Template)).toContain('edit.find-previous')
@@ -302,14 +319,24 @@ describe('menu template accelerators match the platform keybinding tables (Parag
     expect(referencedIds(viewTemplate as unknown as Template)).toContain('view.typewriter-mode')
     expect(referencedIds(viewTemplate as unknown as Template)).toContain('view.focus-mode')
 
-    expect(isEqualAccelerator(accel(keybindingsDarwin, 'paragraph.heading-1'), 'Command+1')).toBe(true)
+    expect(isEqualAccelerator(accel(keybindingsDarwin, 'paragraph.heading-1'), 'Command+1')).toBe(
+      true
+    )
     expect(keybindingsWindows.get('paragraph.heading-1')).toBe('')
-    expect(isEqualAccelerator(accel(keybindingsDarwin, 'edit.duplicate'), 'Command+Option+D')).toBe(true)
+    expect(isEqualAccelerator(accel(keybindingsDarwin, 'edit.duplicate'), 'Command+Option+D')).toBe(
+      true
+    )
     expect(isEqualAccelerator(accel(keybindingsLinux, 'edit.duplicate'), 'Ctrl+Shift+E')).toBe(true)
     expect(isEqualAccelerator(accel(keybindingsLinux, 'edit.find-next'), 'F3')).toBe(true)
     expect(isEqualAccelerator(accel(keybindingsDarwin, 'edit.find-next'), 'Cmd+G')).toBe(true)
-    expect(isEqualAccelerator(accel(keybindingsWindows, 'view.source-code-mode'), 'Ctrl+E')).toBe(true)
-    expect(isEqualAccelerator(accel(keybindingsDarwin, 'view.source-code-mode'), 'Command+Option+S')).toBe(true)
-    expect(isEqualAccelerator(accel(keybindingsWindows, 'view.focus-mode'), 'Ctrl+Shift+J')).toBe(true)
+    expect(isEqualAccelerator(accel(keybindingsWindows, 'view.source-code-mode'), 'Ctrl+E')).toBe(
+      true
+    )
+    expect(
+      isEqualAccelerator(accel(keybindingsDarwin, 'view.source-code-mode'), 'Command+Option+S')
+    ).toBe(true)
+    expect(isEqualAccelerator(accel(keybindingsWindows, 'view.focus-mode'), 'Ctrl+Shift+J')).toBe(
+      true
+    )
   })
 })

@@ -96,7 +96,10 @@ export const isDangerousExecutableFile = (filepath: string): boolean => {
   // Windows strips trailing dots/spaces during ShellExecute canonicalization,
   // so `update.js.` / `<./update.js >` still run `update.js` — strip them
   // before reading the extension or the guard is trivially bypassed.
-  const ext = path.extname(filepath.replace(/[ .]+$/, '')).slice(1).toLowerCase()
+  const ext = path
+    .extname(filepath.replace(/[ .]+$/, ''))
+    .slice(1)
+    .toLowerCase()
   return !!ext && DANGEROUS_EXECUTABLE_EXTENSIONS.includes(ext)
 }
 

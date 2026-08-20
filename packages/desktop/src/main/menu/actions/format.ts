@@ -101,10 +101,11 @@ export const loadFormatCommands = (commandManager: CommandManager): void => {
  * @param formats A object map with selected formats.
  */
 export const updateFormatMenu = (applicationMenu: Menu, formats: Record<string, boolean>): void => {
-  const formatMenuItem: MenuItem = applicationMenu.getMenuItemById('formatMenuItem')!
-  formatMenuItem.submenu!.items.forEach((item: MenuItem) => (item.checked = false))
-  formatMenuItem.submenu!.items.forEach((item: MenuItem) => {
-    if (item.id && formats[MENU_ID_FORMAT_MAP[item.id]!]) {
+  const formatMenuItem = applicationMenu.getMenuItemById('formatMenuItem')
+  if (!formatMenuItem?.submenu) return
+  formatMenuItem.submenu.items.forEach((item: MenuItem) => (item.checked = false))
+  formatMenuItem.submenu.items.forEach((item: MenuItem) => {
+    if (item.id && formats[MENU_ID_FORMAT_MAP[item.id] ?? '']) {
       item.checked = true
     }
   })

@@ -38,7 +38,7 @@ interface WatcherEntry {
   close: () => void
 }
 
-const add = async(
+const add = async (
   win: BrowserWindow,
   pathname: string,
   type: WatchType,
@@ -106,7 +106,7 @@ const unlink = (win: BrowserWindow, pathname: string, type: WatchType): void => 
   })
 }
 
-const change = async(
+const change = async (
   win: BrowserWindow,
   pathname: string,
   type: WatchType,
@@ -133,7 +133,13 @@ const change = async(
   if (isMarkdown) {
     try {
       const [data, stats] = await Promise.all([
-        loadMarkdownFile(pathname, endOfLine, autoGuessEncoding, trimTrailingNewline, autoNormalizeLineEndings),
+        loadMarkdownFile(
+          pathname,
+          endOfLine,
+          autoGuessEncoding,
+          trimTrailingNewline,
+          autoNormalizeLineEndings
+        ),
         fsPromises.stat(pathname)
       ])
       const file = { pathname, data, mtimeMs: stats.mtimeMs }
@@ -235,11 +241,11 @@ class Watcher {
       // ~1s late (GH#3955).
       ...(type === 'file'
         ? {
-          awaitWriteFinish: {
-            stabilityThreshold: WATCHER_STABILITY_THRESHOLD,
-            pollInterval: WATCHER_STABILITY_POLL_INTERVAL
+            awaitWriteFinish: {
+              stabilityThreshold: WATCHER_STABILITY_THRESHOLD,
+              pollInterval: WATCHER_STABILITY_POLL_INTERVAL
+            }
           }
-        }
         : {}),
 
       usePolling
@@ -252,7 +258,7 @@ class Watcher {
     let renameTimer: NodeJS.Timeout | null = null
 
     watcher
-      .on('add', async(pathname: string) => {
+      .on('add', async (pathname: string) => {
         if (!(await this._shouldIgnoreEvent(win.id, pathname, type, usePolling))) {
           const { _preferences } = this
           const eol = _preferences.getPreferredEol() as LineEnding
@@ -272,7 +278,7 @@ class Watcher {
           )
         }
       })
-      .on('change', async(pathname: string) => {
+      .on('change', async (pathname: string) => {
         if (!(await this._shouldIgnoreEvent(win.id, pathname, type, usePolling))) {
           const { _preferences } = this
           const eol = _preferences.getPreferredEol() as LineEnding
@@ -296,9 +302,7 @@ class Watcher {
       .on('addDir', (pathname: string) => addDir(win, pathname, type))
       .on('unlinkDir', (pathname: string) => unlinkDir(win, pathname, type))
       .on('raw', (event: string, subpath: string, details: unknown) => {
-        if (
-          globalThis.MARKTEXT_DEBUG_VERBOSE >= 3
-        ) {
+        if (globalThis.MARKTEXT_DEBUG_VERBOSE >= 3) {
           console.log('watcher: ', event, subpath, details)
         }
 
@@ -307,7 +311,7 @@ class Watcher {
           if (renameTimer) {
             clearTimeout(renameTimer)
           }
-          renameTimer = setTimeout(async() => {
+          renameTimer = setTimeout(async () => {
             renameTimer = null
             if (disposed) {
               return
@@ -438,9 +442,7 @@ class Watcher {
             try {
               const fileInfo = await fsPromises.stat(pathname)
               if (fileInfo.mtime.getTime() - start.getTime() < duration) {
-                if (
-                  globalThis.MARKTEXT_DEBUG_VERBOSE >= 3
-                ) {
+                if (globalThis.MARKTEXT_DEBUG_VERBOSE >= 3) {
                   console.log(
                     `Ignoring file event after "stat": current="${currentTime.toISOString()}", start="${start.toISOString()}", file="${fileInfo.mtime.toISOString()}".`
                   )

@@ -26,14 +26,8 @@
         </li>
       </ul>
     </div>
-    <div
-      v-show="rightColumn"
-      class="right-column"
-    >
-      <div
-        v-if="rightColumn === 'files'"
-        class="trees-container"
-      >
+    <div v-show="rightColumn" class="right-column">
+      <div v-if="rightColumn === 'files'" class="trees-container">
         <tree
           v-for="(tree, index) in projectTrees"
           :key="tree.pathname"
@@ -52,10 +46,7 @@
           :show-opened-files-section="true"
         />
         <!-- Always-visible strip to add another folder when at least one is open -->
-        <div
-          v-if="projectTrees.length > 0"
-          class="open-folder-strip"
-        >
+        <div v-if="projectTrees.length > 0" class="open-folder-strip">
           <el-button
             text
             bg
@@ -70,11 +61,7 @@
       <side-bar-search v-else-if="rightColumn === 'search'" />
       <toc v-else-if="rightColumn === 'toc'" />
     </div>
-    <div
-      v-show="rightColumn"
-      ref="dragBar"
-      class="drag-bar"
-    />
+    <div v-show="rightColumn" ref="dragBar" class="drag-bar" />
   </div>
 </template>
 

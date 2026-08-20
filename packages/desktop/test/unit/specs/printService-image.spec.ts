@@ -20,7 +20,10 @@ vi.hoisted(() => {
     sep: '/',
     join: (...parts: string[]) => parts.join('/'),
     resolve: (...parts: string[]) =>
-      parts.join('/').replace(/\/\.\//g, '/').replace(/\/{2,}/g, '/')
+      parts
+        .join('/')
+        .replace(/\/\.\//g, '/')
+        .replace(/\/{2,}/g, '/')
   }
   w.window.DIRNAME = '/docs'
 })
@@ -41,9 +44,7 @@ describe('resolveLocalImageSrc — branch coverage', () => {
   })
 
   it('(c) UNC image path → file:// preserving the \\\\host prefix', () => {
-    expect(resolveLocalImageSrc('\\\\host\\share\\c.png')).toBe(
-      'file://\\\\host\\share\\c.png'
-    )
+    expect(resolveLocalImageSrc('\\\\host\\share\\c.png')).toBe('file://\\\\host\\share\\c.png')
   })
 
   it('(d) data: URI is left untouched (no file:// prefix)', () => {
@@ -62,9 +63,7 @@ describe('resolveLocalImageSrc — branch coverage', () => {
   })
 
   it('(g) https URL is left untouched', () => {
-    expect(resolveLocalImageSrc('https://example.com/a.png')).toBe(
-      'https://example.com/a.png'
-    )
+    expect(resolveLocalImageSrc('https://example.com/a.png')).toBe('https://example.com/a.png')
   })
 
   it('absolute path with a query keeps its extension recognised (POSIX → file://)', () => {

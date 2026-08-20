@@ -56,7 +56,7 @@ describe('useEditorStore SHOW_IMAGE_DELETION_URL', () => {
     expect(opts.message).toContain(url)
   })
 
-  it('copies the deletion URL to the clipboard when the confirm resolves', async() => {
+  it('copies the deletion URL to the clipboard when the confirm resolves', async () => {
     const store = useEditorStore()
     const url = 'https://imgur.example/delete/xyz789'
     const writeSpy = vi.spyOn(window.electron.clipboard, 'writeText')

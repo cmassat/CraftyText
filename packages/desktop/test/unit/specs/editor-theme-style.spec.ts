@@ -105,14 +105,11 @@ describe('theme.ts style injection helpers', () => {
       expect(styleHtml(WIDTH_STYLE_ID)).toBe('')
     })
 
-    it.each(['abc', '10', '10em'])(
-      'rejects the invalid value %s and writes nothing',
-      (value) => {
-        setEditorWidth(value)
+    it.each(['abc', '10', '10em'])('rejects the invalid value %s and writes nothing', (value) => {
+      setEditorWidth(value)
 
-        expect(styleHtml(WIDTH_STYLE_ID)).toBe('')
-      }
-    )
+      expect(styleHtml(WIDTH_STYLE_ID)).toBe('')
+    })
 
     it('reuses a single style element across calls', () => {
       setEditorWidth('60ch')

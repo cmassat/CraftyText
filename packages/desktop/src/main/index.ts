@@ -103,8 +103,12 @@ try {
     : ''
   log.error(t('error.initializationFailed', { hint: msgHint }), errorObj)
 
-  const EXIT_ON_ERROR = !!(process.env.CRAFTYTEXT_EXIT_ON_ERROR || process.env.MARKTEXT_EXIT_ON_ERROR)
-  const SHOW_ERROR_DIALOG = !(process.env.CRAFTYTEXT_ERROR_INTERACTION || process.env.MARKTEXT_ERROR_INTERACTION)
+  const EXIT_ON_ERROR = !!(
+    process.env.CRAFTYTEXT_EXIT_ON_ERROR || process.env.MARKTEXT_EXIT_ON_ERROR
+  )
+  const SHOW_ERROR_DIALOG = !(
+    process.env.CRAFTYTEXT_ERROR_INTERACTION || process.env.MARKTEXT_ERROR_INTERACTION
+  )
   if (!EXIT_ON_ERROR && SHOW_ERROR_DIALOG) {
     dialog.showErrorBox(
       t('error.startupError'),

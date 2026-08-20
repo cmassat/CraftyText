@@ -7,7 +7,7 @@ author: Tester
 
 ## ATX heading level two
 
-A plain paragraph with **bold**, *italic*, ~~strike~~, and `inline code`.
+A plain paragraph with **bold**, _italic_, ~~strike~~, and `inline code`.
 
 > First level quote.
 >
@@ -24,7 +24,7 @@ A plain paragraph with **bold**, *italic*, ~~strike~~, and `inline code`.
 - [x] Task done
 
 ```js
-function hello (name) {
+function hello(name) {
   return `Hello, ${name}!`
 }
 ```
@@ -32,7 +32,7 @@ function hello (name) {
 | Name | Role | Score |
 | :--- | :--: | ----: |
 | Ada  | Eng  |    97 |
-| Bob  | PM   |    88 |
+| Bob  |  PM  |    88 |
 
 Visit [example](https://example.com) for more.
 

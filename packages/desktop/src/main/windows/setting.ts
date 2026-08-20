@@ -55,6 +55,7 @@ class SettingWindow extends BaseWindow {
 
     winOptions.backgroundColor = this._getPreferredBackgroundColor(theme)
     let win: BrowserWindow | null = (this.browserWindow = new BrowserWindow(winOptions))
+    const w = win
 
     win.webContents.on('did-fail-load', (_event, code, desc, url) => {
       log.error(`did-fail-load ${code} ${desc} @ ${url}`)
@@ -75,20 +76,20 @@ class SettingWindow extends BaseWindow {
 
     win.on('focus', () => {
       this.emit('window-focus')
-      win!.webContents.send('mt::window-active-status', { status: true })
+      w.webContents.send('mt::window-active-status', { status: true })
     })
 
     // Lost focus
     win.on('blur', () => {
       this.emit('window-blur')
-      win!.webContents.send('mt::window-active-status', { status: false })
+      w.webContents.send('mt::window-active-status', { status: false })
     })
 
     win.on('close', (event) => {
       this.emit('window-close')
 
       event.preventDefault()
-      ipcMain.emit('window-close-by-id', win!.id)
+      ipcMain.emit('window-close-by-id', w.id)
     })
 
     // The window is now destroyed.
@@ -106,7 +107,7 @@ class SettingWindow extends BaseWindow {
     const devToolsAccelerator = keybindings.getAccelerator('view.toggle-dev-tools')
     if (env.debug && devToolsAccelerator) {
       electronLocalshortcut.register(win, devToolsAccelerator, () => {
-        win!.webContents.toggleDevTools()
+        w.webContents.toggleDevTools()
       })
     }
     return win

@@ -49,9 +49,7 @@ describe('deriveKeyedToc', () => {
   })
 
   it('preserves slug (for the scroll-to-heading payload) while keying by githubSlug', () => {
-    const keyed = deriveKeyedToc([
-      { label: 'A', slug: 'uid-42', githubSlug: 'a', children: [] }
-    ])
+    const keyed = deriveKeyedToc([{ label: 'A', slug: 'uid-42', githubSlug: 'a', children: [] }])
     expect(keyed[0].slug).toBe('uid-42')
     expect(keyed[0].key).toBe('a')
   })

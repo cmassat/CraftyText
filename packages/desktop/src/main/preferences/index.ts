@@ -68,14 +68,14 @@ class Preference extends TypedEmitter<PreferenceEvents> {
 
       // Set best theme on first application start.
       if (nativeTheme.shouldUseDarkColors) {
-        defaultSettings!.theme = 'dark'
+        if (defaultSettings) defaultSettings.theme = 'dark'
       }
 
       // Set system language on first application start
       if (!this.hasPreferencesFile) {
         const systemLanguage = this._getSystemLanguage()
         if (systemLanguage) {
-          defaultSettings!.language = systemLanguage
+          if (defaultSettings) defaultSettings.language = systemLanguage
         }
       }
     } catch (err) {
@@ -212,7 +212,7 @@ class Preference extends TypedEmitter<PreferenceEvents> {
       }
 
       // Attempt to match the primary part of the language (e.g. zh)
-      const primaryLanguage = systemLocale.split('-')[0]!
+      const primaryLanguage = systemLocale.split('-')[0] ?? ''
       const matchedLanguage = supportedLanguages.find((lang) => lang.startsWith(primaryLanguage))
 
       if (matchedLanguage) {

@@ -51,7 +51,7 @@ class QuickOpenCommand {
     this._cancelFn = null
   }
 
-  search = async(query: string): Promise<QuickOpenSubcommand[]> => {
+  search = async (query: string): Promise<QuickOpenSubcommand[]> => {
     // Show opened files when no query given.
     if (!query) {
       return this.subcommands
@@ -73,7 +73,7 @@ class QuickOpenCommand {
     return this._doSearch(query)
   }
 
-  run = async(): Promise<void> => {
+  run = async (): Promise<void> => {
     const { _editorState, _folderState } = this
     if (this._getRootPaths().length === 0 && _editorState.tabs.length === 0) {
       throw new Error(null as unknown as string)
@@ -90,14 +90,15 @@ class QuickOpenCommand {
       })
   }
 
-  execute = async(): Promise<void> => {
+  execute = async (): Promise<void> => {
     // Timeout to hide the command palette and then show again to prevent issues.
     await delay(100)
     bus.emit('show-command-palette', this)
   }
 
-  executeSubcommand = async(id: string): Promise<void> => {
-    const { windowId } = window.marktext!.env!
+  executeSubcommand = async (id: string): Promise<void> => {
+    const { windowId } = window.marktext?.env ?? {}
+    if (windowId === undefined) return
     window.electron.ipcRenderer.send('mt::open-file-by-window-id', windowId, id)
   }
 
@@ -133,11 +134,7 @@ class QuickOpenCommand {
 
       for (const tab of _editorState.tabs) {
         const { pathname } = tab
-        if (
-          pathname &&
-          re.test(pathname) &&
-          !this._isChildOfAnyRoot(pathname, rootPaths)
-        ) {
+        if (pathname && re.test(pathname) && !this._isChildOfAnyRoot(pathname, rootPaths)) {
           searchResults.add(pathname)
         }
       }
@@ -213,7 +210,10 @@ class QuickOpenCommand {
     return inclusions
   }
 
-  _getPath = (pathname: string, rootPaths: string[] = this._getRootPaths()): { title?: string; description: string } => {
+  _getPath = (
+    pathname: string,
+    rootPaths: string[] = this._getRootPaths()
+  ): { title?: string; description: string } => {
     const rootPath = this._getBestRootPath(pathname, rootPaths)
     if (!rootPath) {
       return { title: pathname, description: pathname }
@@ -230,7 +230,7 @@ class QuickOpenCommand {
   _getRootPaths = (): string[] => {
     const { projectTree, projectTrees } = this._folderState
     const rootPaths = Array.isArray(projectTrees)
-      ? projectTrees.map(tree => tree.pathname).filter(Boolean)
+      ? projectTrees.map((tree) => tree.pathname).filter(Boolean)
       : []
     if (rootPaths.length) {
       return rootPaths
@@ -239,7 +239,7 @@ class QuickOpenCommand {
   }
 
   _isChildOfAnyRoot = (pathname: string, rootPaths: string[]): boolean => {
-    return rootPaths.some(rootPath => window.fileUtils.isChildOfDirectory(rootPath, pathname))
+    return rootPaths.some((rootPath) => window.fileUtils.isChildOfDirectory(rootPath, pathname))
   }
 
   _getBestRootPath = (pathname: string, rootPaths: string[]): string | null => {

@@ -114,7 +114,9 @@ class ExportMarkdown {
           // Start a new list without separation due changing the bullet or ordered list delimiter starts a new list.
           // Guard against transient empty-children state during list mutation (#4346).
           const firstChild = block.children[0]
-          const bulletMarkerOrDelimiter = firstChild ? firstChild.bulletMarkerOrDelimiter : undefined
+          const bulletMarkerOrDelimiter = firstChild
+            ? firstChild.bulletMarkerOrDelimiter
+            : undefined
           if (lastListBullet && lastListBullet !== bulletMarkerOrDelimiter) {
             insertNewLine = false
           }
@@ -135,7 +137,9 @@ class ExportMarkdown {
           // Start a new list without separation due changing the bullet or ordered list delimiter starts a new list.
           // Guard against transient empty-children state during list mutation (#4346).
           const firstChild = block.children[0]
-          const bulletMarkerOrDelimiter = firstChild ? firstChild.bulletMarkerOrDelimiter : undefined
+          const bulletMarkerOrDelimiter = firstChild
+            ? firstChild.bulletMarkerOrDelimiter
+            : undefined
           if (lastListBullet && lastListBullet !== bulletMarkerOrDelimiter) {
             insertNewLine = false
           }
