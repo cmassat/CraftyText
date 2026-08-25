@@ -26,6 +26,7 @@
         </li>
       </ul>
     </div>
+    <div v-show="rightColumn" class="left-column-separator" />
     <div v-show="rightColumn" class="right-column">
       <div v-if="rightColumn === 'files'" class="trees-container">
         <tree
@@ -214,6 +215,13 @@ const clearSidebarInputsOnEscape = (event: KeyboardEvent): void => {
   box-sizing: border-box;
 }
 
+.left-column-separator {
+  width: 1px;
+  height: 100%;
+  background-color: var(--itemBgColor);
+  flex-shrink: 0;
+}
+
 .left-column > ul {
   opacity: 1;
 }
@@ -257,6 +265,8 @@ const clearSidebarInputsOnEscape = (event: KeyboardEvent): void => {
   flex: 1;
   width: calc(100% - 50px);
   overflow: hidden;
+  padding-left: 1rem;
+  box-sizing: border-box;
 }
 
 .trees-container {
