@@ -181,6 +181,37 @@ test.describe('Title-bar word counter (item 24)', () => {
   })
 })
 
+test.describe('Title-bar source mode toggle', () => {
+  let app: ElectronApplication
+  let page: Page
+
+  test.beforeAll(async () => {
+    const launched = await launchWithMarkdown('# Toggle mode\n\nBody text.\n')
+    app = launched.app
+    page = launched.page
+  })
+
+  test.afterAll(async () => {
+    if (app) await app.close()
+  })
+
+  test('switches the current document between visual and source modes', async () => {
+    const toggle = page.locator('.source-mode-toggle')
+
+    await expect(toggle).toBeVisible()
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false')
+
+    await toggle.click()
+    await expect(page.locator('.source-code .CodeMirror')).toBeVisible()
+    await expect(toggle).toHaveAttribute('aria-pressed', 'true')
+
+    await toggle.click()
+    await expect(page.locator('.source-code')).toHaveCount(0)
+    await expect(page.locator('.editor-component')).toBeVisible()
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false')
+  })
+})
+
 // ---------------------------------------------------------------------------
 // Coverage backfill (checklist item 169). Edit > Select All flows through
 // `mt::editor-edit-action` ('selectAll') -> store/listenForMain.ts

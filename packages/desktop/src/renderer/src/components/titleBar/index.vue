@@ -58,6 +58,23 @@
             <span class="text-center-vertical">{{ `${HASH[show].short} ${wordCount[show]}` }}</span>
           </div>
         </el-tooltip>
+        <el-tooltip
+          v-if="wordCount"
+          class="item"
+          :content="t('commands.view.toggleSourceCodeMode')"
+          placement="bottom-end"
+        >
+          <button
+            type="button"
+            class="source-mode-toggle"
+            :class="{ active: sourceCode }"
+            :aria-label="t('commands.view.toggleSourceCodeMode')"
+            :aria-pressed="sourceCode"
+            @click.stop="toggleSourceMode"
+          >
+            <span aria-hidden="true">&lt;/&gt;</span>
+          </button>
+        </el-tooltip>
       </div>
       <div
         v-if="titleBarStyle === 'custom' && !isFullScreen && !isOsx"
@@ -112,6 +129,7 @@ import { shouldShowInAppTitleBar } from './visibility'
 import { useEditorStore } from '@/store/editor'
 import { useI18n } from 'vue-i18n'
 import { ArrowRight } from '@element-plus/icons-vue'
+import bus from '@/bus'
 import type { FileWordCount } from '@shared/types/files'
 
 interface ProjectInfo {
@@ -173,7 +191,7 @@ onMounted(async () => {
   } catch {}
 })
 
-const { titleBarStyle } = storeToRefs(preferencesStore)
+const { titleBarStyle, sourceCode } = storeToRefs(preferencesStore)
 const { showTabBar } = storeToRefs(layoutStore)
 
 const paths = computed(() => {
@@ -214,6 +232,10 @@ const handleWordClick = () => {
   index += 1
   if (index >= len) index = 0
   show.value = ITEMS[index]!
+}
+
+const toggleSourceMode = () => {
+  bus.emit('view:toggle-view-entry', 'sourceCode')
 }
 
 const handleCloseClick = () => {
@@ -404,6 +426,32 @@ div.title > span {
   &:hover > span {
     background: var(--sideBarBgColor);
     color: var(--sideBarTitleColor);
+  }
+}
+
+.source-mode-toggle {
+  -webkit-app-region: no-drag;
+  appearance: none;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--editorColor30);
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 13px;
+  line-height: 24px;
+  min-width: 32px;
+  padding: 0 5px;
+  transition: all 0.25s ease-in-out;
+
+  &:hover {
+    background: var(--sideBarBgColor);
+    color: var(--sideBarTitleColor);
+  }
+
+  &.active {
+    background: var(--sideBarBgColor);
+    color: var(--themeColor);
   }
 }
 
