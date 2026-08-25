@@ -13,6 +13,34 @@ const cli = (): ParsedArgs => {
   if (process.env.NODE_ENV === 'development') {
     // Don't pass electron development arguments to CraftyText and change user data path.
     argv = ['--user-data-dir', path.join(getPath('appData'), 'craftytext-dev')]
+  } else {
+    // Filter out default runner/app/build directories (like ".", "out", and project root)
+    // so they aren't mistaken as folders/files to open, but preserve actual user-specified paths.
+    argv = argv.filter((arg) => {
+      if (arg.startsWith('--')) return true
+      try {
+        const resolved = path.resolve(arg)
+        const appPath = path.resolve(app.getAppPath())
+        const parentPath = path.resolve(appPath, '..')
+        const grandParentPath = path.resolve(parentPath, '..')
+        const outPath = path.join(appPath, 'out')
+
+        if (
+          resolved === appPath ||
+          resolved === parentPath ||
+          resolved === grandParentPath ||
+          resolved === outPath ||
+          arg === '.' ||
+          arg === 'out' ||
+          arg === 'out/main/index.js'
+        ) {
+          return false
+        }
+      } catch {
+        // Fall back to keeping the argument if resolve fails
+      }
+      return true
+    })
   }
 
   const args = parseArgs(argv, true)

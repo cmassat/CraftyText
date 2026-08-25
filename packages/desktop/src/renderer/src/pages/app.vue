@@ -1,35 +1,37 @@
 <template>
-  <div class="editor-container">
-    <side-bar v-if="init" />
+  <div class="app-layout">
+    <title-bar
+      :project="projectTree"
+      :pathname="pathname"
+      :filename="filename"
+      :active="windowActive"
+      :word-count="wordCount"
+      :platform="platform"
+      :is-saved="isSaved"
+    />
 
-    <div class="editor-middle">
-      <title-bar
-        :project="projectTree"
-        :pathname="pathname"
-        :filename="filename"
-        :active="windowActive"
-        :word-count="wordCount"
-        :platform="platform"
-        :is-saved="isSaved"
-      />
+    <div class="editor-container">
+      <side-bar v-if="init" />
 
-      <div v-if="!init" class="editor-placeholder" />
-      <recent v-if="!hasCurrentFile && init" />
-      <editor-with-tabs
-        v-if="hasCurrentFile && init"
-        :markdown="markdown"
-        :cursor="cursor"
-        :muya-index-cursor="muyaIndexCursor"
-        :source-code="sourceCode"
-        :show-tab-bar="showTabBar"
-        :text-direction="textDirection"
-        :platform="platform"
-      />
-      <command-palette />
-      <about-dialog />
-      <export-setting-dialog />
-      <rename />
-      <import-modal />
+      <div class="editor-middle">
+        <div v-if="!init" class="editor-placeholder" />
+        <recent v-if="!hasCurrentFile && init" />
+        <editor-with-tabs
+          v-if="hasCurrentFile && init"
+          :markdown="markdown"
+          :cursor="cursor"
+          :muya-index-cursor="muyaIndexCursor"
+          :source-code="sourceCode"
+          :show-tab-bar="showTabBar"
+          :text-direction="textDirection"
+          :platform="platform"
+        />
+        <command-palette />
+        <about-dialog />
+        <export-setting-dialog />
+        <rename />
+        <import-modal />
+      </div>
     </div>
   </div>
 </template>
@@ -216,17 +218,24 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .editor-placeholder,
 .editor-container {
   display: flex;
   flex-direction: row;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
 }
 .editor-container .hide {
   z-index: -1;
@@ -241,8 +250,9 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 100vh;
+  height: 100%;
   position: relative;
+  overflow: hidden;
   & > .editor {
     flex: 1;
   }

@@ -11,7 +11,7 @@ describe('shouldShowInAppTitleBar (#4210)', () => {
     expect(shouldShowInAppTitleBar('native', false)).toBe(false)
   })
 
-  it('still shows the in-app title bar on macOS even with the native style', () => {
+  it('shows the in-app title bar on macOS even with the native style', () => {
     expect(shouldShowInAppTitleBar('native', true)).toBe(true)
   })
 

@@ -191,7 +191,7 @@ const clearSidebarInputsOnEscape = (event: KeyboardEvent): void => {
   flex-shrink: 0;
   flex-grow: 0;
   width: 280px;
-  height: 100vh;
+  height: 100%;
   min-width: 220px;
   position: relative;
   color: var(--sideBarColor);
@@ -210,7 +210,7 @@ const clearSidebarInputsOnEscape = (event: KeyboardEvent): void => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: 28px;
+  padding-top: 10px;
   box-sizing: border-box;
 }
 

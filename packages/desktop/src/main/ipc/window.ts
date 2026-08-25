@@ -127,4 +127,22 @@ export const registerWindowHandlers = (): void => {
       log.error('application menu popup failed:', err)
     }
   })
+
+  ipcMain.on('mt::menu::popup-submenu', (event, menuName: string, position?: MenuPopupPosition) => {
+    const win = windowFromEvent(event)
+    if (!win) return
+    try {
+      const appMenu = Menu.getApplicationMenu()
+      if (!appMenu) return
+      const menuItem = appMenu.items.find((item) => {
+        const cleanLabel = item.label.replace('&', '').toLowerCase()
+        return cleanLabel === menuName.toLowerCase() || item.id === menuName
+      })
+      if (menuItem && menuItem.submenu) {
+        menuItem.submenu.popup({ window: win, x: position?.x, y: position?.y })
+      }
+    } catch (err) {
+      log.error('submenu popup failed:', err)
+    }
+  })
 }

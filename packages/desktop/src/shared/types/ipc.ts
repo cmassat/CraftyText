@@ -127,6 +127,7 @@ export interface IpcSendChannels {
   'mt::make-screenshot': []
   'mt::menu::popup': [template: MenuTemplate, position?: MenuPopupPosition]
   'mt::menu::popup-application': [position?: MenuPopupPosition]
+  'mt::menu::popup-submenu': [menuName: string, position?: MenuPopupPosition]
   'mt::open-file': [filePath: string, options?: unknown]
   'mt::open-file-by-window-id': [windowId: number, filePath: string, options?: unknown]
   'mt::open-keybindings-config': []
