@@ -1,4 +1,4 @@
-name: Release MarkText
+name: Release CraftyText
 
 on:
   push:
@@ -134,7 +134,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: marktext-${{ matrix.name }}
+          name: craftytext-${{ matrix.name }}
           retention-days: 7
           if-no-files-found: error
           path: |
@@ -180,9 +180,25 @@ jobs:
           echo "---"
           cat SHA256SUMS.txt
 
+      # GitHub's auto-generated notes diff against the previous release. With
+      # none, they enumerate the entire history — for this fork that is every
+      # inherited MarkText commit, so suppress them on the first release.
+      - name: Detect previous release
+        id: prev
+        run: |
+          count=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=1" --jq 'length')
+          if [[ "$count" -gt 0 ]]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Compose release notes body
         env:
           IS_PRERELEASE: ${{ contains(github.ref_name, '-') }}
+          HAS_PREV_RELEASE: ${{ steps.prev.outputs.exists }}
         run: |
           {
             if [[ "$IS_PRERELEASE" == "true" ]]; then
@@ -190,10 +206,15 @@ jobs:
               echo "- May contain bugs and unfinished features."
               echo ""
             fi
+            if [[ "$HAS_PREV_RELEASE" != "true" ]]; then
+              echo "## First release of CraftyText"
+              echo "CraftyText is a fork of [MarkText](https://github.com/marktext/marktext) built around multiple project folder support. See the [README](https://github.com/${GITHUB_REPOSITORY}#what-the-fork-adds) for what the fork adds."
+              echo ""
+            fi
             echo "## ⚠️ Note for macOS users"
-            echo "Builds are unsigned (no Apple Developer ID). After dragging MarkText into Applications, clear the quarantine flag once:"
+            echo "Builds are unsigned (no Apple Developer ID). After dragging CraftyText into Applications, clear the quarantine flag once:"
             echo '```'
-            echo 'xattr -cr /Applications/marktext.app'
+            echo 'xattr -cr /Applications/CraftyText.app'
             echo '```'
             echo ""
             echo "## Verifying downloads"
@@ -212,7 +233,7 @@ jobs:
         with:
           draft: true
           prerelease: ${{ contains(github.ref_name, '-') }}
-          generate_release_notes: true
+          generate_release_notes: ${{ steps.prev.outputs.exists == 'true' }}
           name: ${{ github.ref_name }}
           body_path: release_body.md
           fail_on_unmatched_files: true
