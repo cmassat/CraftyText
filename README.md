@@ -1,5 +1,3 @@
-<p align="center"><img src="docs/assets/logo-small.png" alt="CraftyText" width="100" height="100"></p>
-
 <h1 align="center">CraftyText</h1>
 
 <div align="center">
@@ -18,11 +16,26 @@
 
 ## About
 
-CraftyText is a fork of [MarkText](https://github.com/marktext/marktext) with additional enhancements and its own branding. The project remains licensed under MIT and preserves the original MarkText copyright notices.
+CraftyText is a fork of [MarkText](https://github.com/marktext/marktext), started for one reason: **multiple project folders**.
+
+MarkText is built around a single open folder. If your notes live in one place and your code in another, that means a window per folder and no way to search across them. CraftyText opens any number of folders in one sidebar and searches all of them at once.
+
+Everything else here followed from using that daily. The project remains licensed under MIT and preserves the original MarkText copyright notices.
 
 ## Screenshot
 
-![](docs/assets/marktext.png?raw=true)
+![CraftyText](docs/assets/craftytext.png?raw=true)
+
+## What the Fork Adds
+
+Beyond everything MarkText already does:
+
+- **Multiple project folders** — open any number of folders in the sidebar at once, each with its own tree.
+- **Cross-folder search** — one query searches every open folder, with duplicate hits deduplicated and expand/collapse controls over the results.
+- **Source mode toggle in the title bar** — switch between WYSIWYG and raw markdown in one click instead of a menu dive.
+- **Responsive custom menu bar** — the menu adapts to the window width rather than overflowing it.
+- **Restored folder sessions** — reopen with the folders you had open last time.
+- **Retro 70s and Neon 80s themes** — two new families, each in light and dark, bringing the built-in total to 37.
 
 ## Features
 
