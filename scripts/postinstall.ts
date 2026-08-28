@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 /**
  * Cross-platform postinstall: patch native-keymap for C++20, download Electron,
@@ -21,9 +21,15 @@
  * the local package.json are picked up correctly.
  */
 
-const { execSync } = require('child_process')
-const path = require('path')
-const fs = require('fs')
+import { execSync } from 'child_process'
+import fs from 'fs'
+import os from 'os'
+import path from 'path'
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
+
+const require = createRequire(import.meta.url)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const repoRoot = path.join(__dirname, '..')
 const desktopRoot = path.join(repoRoot, 'packages', 'desktop')
@@ -62,7 +68,6 @@ const electronInstall = path.join(desktopRoot, 'node_modules', 'electron', 'inst
 if (!fs.existsSync(electronInstall)) {
   console.error('electron/install.js not found — skipping Electron download')
 } else {
-  const os = require('os')
   const plat =
     process.env.ELECTRON_INSTALL_PLATFORM || process.env.npm_config_platform || os.platform()
   const platformBinary =

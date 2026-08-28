@@ -1,9 +1,13 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-'use strict'
 
-const path = require('path')
+import path from 'path'
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
+
+const require = createRequire(import.meta.url)
 const checker = require('license-checker')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // license-checker keys packages as "<name>@<version>", and excludePackages
 // matches that string exactly — name-only entries don't match. Build the
@@ -53,7 +57,7 @@ const validateLicenses = (rootDir) => {
   })
 }
 
-module.exports = {
+export {
   getLicenses,
   validateLicenses
 }
