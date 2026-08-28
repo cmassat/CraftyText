@@ -69,9 +69,13 @@ const isCodeMirrorRaceCondition = (error: Error | null | undefined): boolean => 
   // This happens when the document state is out of sync with the display during rapid changes
   const isMapOnUndefined = error.message === "Cannot read properties of undefined (reading 'map')"
   const isInPrepareMeasure = error.stack.includes('prepareMeasureForLine')
+  // Mouse-click path
   const isInCoordsChar = error.stack.includes('coordsChar') || error.stack.includes('posFromMouse')
+  // Window-move/resize path: CM redraws the selection cursor when the window repositions
+  const isInSelectionRedraw =
+    error.stack.includes('drawSelectionCursor') || error.stack.includes('prepareSelection')
 
-  return isMapOnUndefined && isInPrepareMeasure && isInCoordsChar
+  return isMapOnUndefined && isInPrepareMeasure && (isInCoordsChar || isInSelectionRedraw)
 }
 
 const handleRendererError = (event: ErrorEvent | PromiseRejectionEvent | Event): void => {
