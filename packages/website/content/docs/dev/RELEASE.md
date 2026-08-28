@@ -20,31 +20,39 @@ git checkout -b release/vX.Y.0     # e.g. release/v0.19.0
 
 Reuse the same branch for every RC of that minor version (`rc.1`, `rc.2`, …) **and** the eventual stable tag. For follow-ups, just `git checkout release/vX.Y.0` and skip to step 2.
 
-## 2. Bump `package.json`
+## 2. Bump the version
 
-Edit the `version` field — it is the only file you need to change.
+Edit the `version` field in **both** manifests, keeping them identical:
 
-| Stage             | Version string                  |
-| ----------------- | ------------------------------- |
-| Release candidate | `0.19.0-rc.1`, `0.19.0-rc.2`, … |
-| Stable            | `0.19.0`                        |
+- `package.json` (workspace root)
+- `packages/desktop/package.json`
+
+electron-builder runs with `packages/desktop` as its working directory, so the desktop manifest is the one that supplies `${version}` to every `artifactName` in `electron-builder.yml`. The root manifest keeps the workspace consistent and is what the release workflow hashes for its Electron binary cache key.
+
+| Stage             | Version string                      |
+| ----------------- | ----------------------------------- |
+| Beta              | `0.20.0-beta.1`, `0.20.0-beta.2`, … |
+| Release candidate | `0.20.0-rc.1`, `0.20.0-rc.2`, …     |
+| Stable            | `0.20.0`                            |
+
+Any pre-release suffix works — the workflow marks a release as a pre-release whenever the tag contains a `-`, so `beta` and `rc` behave identically. Pick one per release series and stay consistent.
 
 ## 3. Commit and push the branch
 
 ```bash
-git add package.json
-git commit -m "chore(release): vX.Y.Z[-rc.N]"
+git add package.json packages/desktop/package.json
+git commit -m "chore(release): vX.Y.Z[-beta.N|-rc.N]"
 git push -u origin release/vX.Y.0
 ```
 
 ## 4. Tag and push
 
 ```bash
-git tag -a vX.Y.Z-rc.N -m "vX.Y.Z-rc.N"
-git push origin vX.Y.Z-rc.N
+git tag -a vX.Y.Z-beta.N -m "vX.Y.Z-beta.N"
+git push origin vX.Y.Z-beta.N
 ```
 
-A `-` in the tag (e.g. `v0.19.0-rc.1`) tells the workflow to mark the GitHub Release as **pre-release** automatically. Plain `vX.Y.Z` tags publish as stable releases.
+A `-` in the tag (e.g. `v0.20.0-beta.1`) tells the workflow to mark the GitHub Release as **pre-release** automatically. Plain `vX.Y.Z` tags publish as stable releases.
 
 ## 5. Open a tracking PR (RC only)
 
