@@ -21,7 +21,9 @@ export const railscastsThemes: readonly string[] = Object.freeze([
   'oxocarbon-dark',
   'kanagawa',
   'nightfox',
-  'cyberdream'
+  'cyberdream',
+  'retro-70s',
+  'neon-80s'
 ])
 
 export const oneDarkThemes: readonly string[] = Object.freeze(['one-dark'])
@@ -58,9 +60,13 @@ const themeBackgroundColors: ReadonlyMap<string, string> = new Map([
   ['monokai-pro', '#2d2a2e'],
   ['nightfox', '#192330'],
   ['nord', '#2e3440'],
+  ['neon-80s', '#0d0213'],
+  ['neon-80s-light', '#fff0fb'],
   ['one-dark', '#282c34'],
   ['oxocarbon-dark', '#161616'],
   ['palenight', '#292d3e'],
+  ['retro-70s', '#3c2f2f'],
+  ['retro-70s-light', '#f5e6cc'],
   ['rose-pine', '#191724'],
   ['rose-pine-dawn', '#faf4ed'],
   ['rose-pine-moon', '#232136'],

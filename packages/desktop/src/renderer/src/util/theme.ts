@@ -32,6 +32,8 @@ import {
   kanagawa,
   nightfox,
   cyberdream,
+  retro70s,
+  neon80s,
   // New gogh themes - Light
   catppuccinLatte,
   gruvboxLight,
@@ -39,7 +41,9 @@ import {
   solarizedLight,
   ayuLight,
   everforestLight,
-  rosePineDawn
+  rosePineDawn,
+  retro70sLight,
+  neon80sLight
 } from './themeColor'
 import { isLinux } from './index'
 
@@ -149,6 +153,12 @@ export const addThemeStyle = (theme: string): void => {
     case 'cyberdream':
       themeStyleEle.innerHTML = patchTheme(cyberdream())
       break
+    case 'retro-70s':
+      themeStyleEle.innerHTML = patchTheme(retro70s())
+      break
+    case 'neon-80s':
+      themeStyleEle.innerHTML = patchTheme(neon80s())
+      break
     // New gogh themes - Light
     case 'catppuccin-latte':
       themeStyleEle.innerHTML = patchTheme(catppuccinLatte())
@@ -170,6 +180,12 @@ export const addThemeStyle = (theme: string): void => {
       break
     case 'rose-pine-dawn':
       themeStyleEle.innerHTML = patchTheme(rosePineDawn())
+      break
+    case 'retro-70s-light':
+      themeStyleEle.innerHTML = patchTheme(retro70sLight())
+      break
+    case 'neon-80s-light':
+      themeStyleEle.innerHTML = patchTheme(neon80sLight())
       break
     default:
       break

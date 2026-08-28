@@ -340,6 +340,20 @@ const onSelectChange = (type: keyof PreferencesState, value: unknown): void => {
         color: #5ea1ff;
       }
     }
+    &.retro-70s {
+      color: rgba(245, 236, 227, 0.8);
+      background: #3c2f2f;
+      & a {
+        color: #e67e22;
+      }
+    }
+    &.neon-80s {
+      color: rgba(226, 243, 254, 0.8);
+      background: #0d0213;
+      & a {
+        color: #ff007f;
+      }
+    }
 
     /* New gogh themes - Light */
     &.catppuccin-latte {
@@ -389,6 +403,20 @@ const onSelectChange = (type: keyof PreferencesState, value: unknown): void => {
       background: #faf4ed;
       & a {
         color: #907aa9;
+      }
+    }
+    &.retro-70s-light {
+      color: rgba(60, 47, 47, 0.8);
+      background: #f5e6cc;
+      & a {
+        color: #e67e22;
+      }
+    }
+    &.neon-80s-light {
+      color: rgba(63, 14, 96, 0.8);
+      background: #fff0fb;
+      & a {
+        color: #ff007f;
       }
     }
 

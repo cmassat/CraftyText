@@ -25,6 +25,8 @@ import oxocarbonDarkTheme from '../assets/themes/oxocarbon-dark.theme.css?inline
 import kanagawaTheme from '../assets/themes/kanagawa.theme.css?inline'
 import nightfoxTheme from '../assets/themes/nightfox.theme.css?inline'
 import cyberdreamTheme from '../assets/themes/cyberdream.theme.css?inline'
+import retro70sTheme from '../assets/themes/retro-70s.theme.css?inline'
+import neon80sTheme from '../assets/themes/neon-80s.theme.css?inline'
 
 // New gogh themes - Light
 import catppuccinLatteTheme from '../assets/themes/catppuccin-latte.theme.css?inline'
@@ -34,6 +36,8 @@ import solarizedLightTheme from '../assets/themes/solarized-light.theme.css?inli
 import ayuLightTheme from '../assets/themes/ayu-light.theme.css?inline'
 import everforestLightTheme from '../assets/themes/everforest-light.theme.css?inline'
 import rosePineDawnTheme from '../assets/themes/rose-pine-dawn.theme.css?inline'
+import retro70sLightTheme from '../assets/themes/retro-70s-light.theme.css?inline'
+import neon80sLightTheme from '../assets/themes/neon-80s-light.theme.css?inline'
 
 // Prism.js syntax highlighting themes
 import darkPrismTheme from '../assets/themes/prismjs/dark.theme.css?inline'
@@ -65,6 +69,10 @@ import horizonDarkPrismTheme from '../assets/themes/prismjs/horizon-dark.theme.c
 import oxocarbonDarkPrismTheme from '../assets/themes/prismjs/oxocarbon-dark.theme.css?inline'
 import nightfoxPrismTheme from '../assets/themes/prismjs/nightfox.theme.css?inline'
 import cyberdreamPrismTheme from '../assets/themes/prismjs/cyberdream.theme.css?inline'
+import retro70sPrismTheme from '../assets/themes/prismjs/retro-70s.theme.css?inline'
+import neon80sPrismTheme from '../assets/themes/prismjs/neon-80s.theme.css?inline'
+import retro70sLightPrismTheme from '../assets/themes/prismjs/retro-70s-light.theme.css?inline'
+import neon80sLightPrismTheme from '../assets/themes/prismjs/neon-80s-light.theme.css?inline'
 import graphitePrismTheme from '../assets/themes/prismjs/graphite.theme.css?inline'
 import ulyssesPrismTheme from '../assets/themes/prismjs/ulysses.theme.css?inline'
 
@@ -170,6 +178,14 @@ export const cyberdream = (): string => {
   return cyberdreamTheme + '\n' + cyberdreamPrismTheme
 }
 
+export const retro70s = (): string => {
+  return retro70sTheme + '\n' + retro70sPrismTheme
+}
+
+export const neon80s = (): string => {
+  return neon80sTheme + '\n' + neon80sPrismTheme
+}
+
 // New gogh themes - Light (with matching Prism themes)
 export const catppuccinLatte = (): string => {
   return catppuccinLatteTheme + '\n' + catppuccinLattePrismTheme
@@ -197,4 +213,12 @@ export const everforestLight = (): string => {
 
 export const rosePineDawn = (): string => {
   return rosePineDawnTheme + '\n' + rosePineDawnPrismTheme
+}
+
+export const retro70sLight = (): string => {
+  return retro70sLightTheme + '\n' + retro70sLightPrismTheme
+}
+
+export const neon80sLight = (): string => {
+  return neon80sLightTheme + '\n' + neon80sLightPrismTheme
 }
