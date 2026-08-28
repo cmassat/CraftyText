@@ -1,6 +1,6 @@
 {
   "name": "craftytext-monorepo",
-  "version": "0.20.0-dev",
+  "version": "0.20.0-beta.1",
   "description": "CraftyText monorepo root",
   "private": true,
   "type": "module",
