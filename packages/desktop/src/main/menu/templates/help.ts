@@ -2,7 +2,7 @@ import path from 'path'
 import { shell, type BrowserWindow, type MenuItemConstructorOptions } from 'electron'
 import { isFile } from 'common/filesystem'
 import * as actions from '../actions/help'
-import { checkUpdates } from '../actions/marktext'
+import { checkUpdates } from '../actions/craftytext'
 import { t } from '../../i18n'
 
 /// Check whether the package is updatable at runtime.
@@ -33,7 +33,7 @@ export default function (): MenuItemConstructorOptions {
     {
       label: t('menu.help.markdownReference'),
       click() {
-        shell.openExternal('https://github.com/cmassat/craftytext')
+        shell.openExternal('https://craftytext.com/docs')
       }
     },
     {
@@ -48,13 +48,13 @@ export default function (): MenuItemConstructorOptions {
     {
       label: t('menu.help.followUs'),
       click() {
-        shell.openExternal('https://github.com/cmassat/craftytext')
+        shell.openExternal('https://craftytext.com')
       }
     },
     {
       label: t('menu.help.support'),
       click() {
-        shell.openExternal('https://github.com/cmassat/craftytext')
+        shell.openExternal('https://craftytext.com')
       }
     },
     {

@@ -22,4 +22,6 @@ pnpm --filter craftytext-website docs:index
 
 ## Deployment
 
-Cloudflare/OpenNext configuration lives in `wrangler.toml`. No custom production domain is configured yet.
+Cloudflare/OpenNext configuration lives in `wrangler.toml`. The production domain is
+`https://craftytext.com`; connect that custom domain to the `craftytext-website` Worker in
+Cloudflare.

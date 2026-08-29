@@ -51,28 +51,28 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm --filter marktext-website run lint
+        run: pnpm --filter craftytext-website run lint
 
       - name: Type-check
-        run: pnpm --filter marktext-website run type-check
+        run: pnpm --filter craftytext-website run type-check
 
       - name: Next build
-        run: pnpm --filter marktext-website run build
+        run: pnpm --filter craftytext-website run build
 
       - name: OpenNext Cloudflare build
-        run: pnpm --filter marktext-website run cf:build
+        run: pnpm --filter craftytext-website run cf:build
 
       # ---- Production deploy: develop push ----
       - name: Deploy (production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: pnpm --filter marktext-website exec wrangler deploy
+        run: pnpm --filter craftytext-website exec wrangler deploy
 
       # ---- Preview deploy: pull_request ----
       #
       # Uploads a Worker version tagged + aliased with the PR number. With
       # Preview URLs enabled on the Worker (Cloudflare dashboard → Workers &
-      # Pages → marktext-website → Settings → Preview URLs), wrangler emits a
-      # URL like https://pr-NNNN-marktext-website.<subdomain>.workers.dev that
+      # Pages → craftytext-website → Settings → Preview URLs), wrangler emits a
+      # URL like https://pr-NNNN-craftytext-website.<subdomain>.workers.dev that
       # stays stable for the life of the PR. If the URL is not present in the
       # output, the Preview URLs feature is off and we report that via a
       # notice on the PR rather than failing the build.
@@ -93,7 +93,7 @@ jobs:
 
           if [ $upload_status -ne 0 ] && grep -q "Could not route to" upload.log; then
             echo "result=not-bootstrapped" >> "$GITHUB_OUTPUT"
-            echo "::warning::Worker 'marktext-website' is not bootstrapped yet. Merge this PR to develop to create it; subsequent PRs will get real preview URLs."
+            echo "::warning::Worker 'craftytext-website' is not bootstrapped yet. Merge this PR to develop to create it; subsequent PRs will get real preview URLs."
             exit 0
           fi
           if [ $upload_status -ne 0 ]; then
@@ -117,7 +117,7 @@ jobs:
           elif [ -n "$VERSION_ID" ]; then
             echo "result=preview-disabled" >> "$GITHUB_OUTPUT"
             echo "version=$VERSION_ID"     >> "$GITHUB_OUTPUT"
-            echo "::warning::Worker version $VERSION_ID uploaded but no preview URL was emitted. Enable Preview URLs on the marktext-website Worker in the Cloudflare dashboard to get clickable PR previews."
+            echo "::warning::Worker version $VERSION_ID uploaded but no preview URL was emitted. Enable Preview URLs on the craftytext-website Worker in the Cloudflare dashboard to get clickable PR previews."
           else
             echo "Could not parse a preview URL or version ID from wrangler output" >&2
             exit 1
@@ -131,7 +131,7 @@ jobs:
           message: |
             **Website preview ready:** ${{ steps.preview.outputs.url }}
 
-            Built from `${{ github.event.pull_request.head.sha }}` · Worker: `marktext-website` · Version: `${{ steps.preview.outputs.version }}` · Alias: `pr-${{ github.event.pull_request.number }}`
+            Built from `${{ github.event.pull_request.head.sha }}` · Worker: `craftytext-website` · Version: `${{ steps.preview.outputs.version }}` · Alias: `pr-${{ github.event.pull_request.number }}`
 
       - name: Comment preview-disabled notice on PR
         if: github.event_name == 'pull_request' && steps.preview.outputs.result == 'preview-disabled'
@@ -139,9 +139,9 @@ jobs:
         with:
           header: website-preview
           message: |
-            **Website preview not generated** — Preview URLs are disabled on the `marktext-website` Worker.
+            **Website preview not generated** — Preview URLs are disabled on the `craftytext-website` Worker.
 
-            The version `${{ steps.preview.outputs.version }}` was uploaded successfully. To enable clickable PR previews, in the Cloudflare dashboard go to **Workers & Pages → marktext-website → Settings → Preview URLs** and turn the feature on. Subsequent PR runs will then post a real preview URL here.
+            The version `${{ steps.preview.outputs.version }}` was uploaded successfully. To enable clickable PR previews, in the Cloudflare dashboard go to **Workers & Pages → craftytext-website → Settings → Preview URLs** and turn the feature on. Subsequent PR runs will then post a real preview URL here.
 
       - name: Comment bootstrap notice on PR
         if: github.event_name == 'pull_request' && steps.preview.outputs.result == 'not-bootstrapped'
@@ -149,6 +149,6 @@ jobs:
         with:
           header: website-preview
           message: |
-            **Website preview not generated** — the `marktext-website` Worker does not exist on Cloudflare yet.
+            **Website preview not generated** — the `craftytext-website` Worker does not exist on Cloudflare yet.
 
             The build itself succeeded. Merge this PR to `develop` to create the Worker; subsequent PRs will get a real preview URL automatically.

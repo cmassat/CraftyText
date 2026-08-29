@@ -496,11 +496,12 @@ const onSelectChange = (key: string, value: unknown) => {
 }
 
 const loadThemesFromDisk = async () => {
-  // marktext.paths is attached to `window` at runtime by bootstrap.ts but
+  // craftytext.paths is attached to `window` at runtime by bootstrap.ts but
   // isn't part of the typed contextBridge surface. Cast through `unknown`.
-  const marktext = (window as unknown as { marktext?: { paths?: { userDataPath?: string } } })
-    .marktext
-  const userDataPath = marktext?.paths?.userDataPath
+  const craftytext = (
+    window as unknown as { craftytext?: { paths?: { userDataPath?: string } } }
+  ).craftytext
+  const userDataPath = craftytext?.paths?.userDataPath
   if (!userDataPath) return
   const themeDir = window.path.join(userDataPath, 'themes/export')
 

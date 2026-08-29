@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   display: 'swap'
 })
 
-const SITE_URL = 'https://github.com/cmassat/craftytext'
+const SITE_URL = 'https://craftytext.com'
 const TITLE = 'CraftyText — The Markdown editor that gets out of your way'
 const DESCRIPTION =
   'A free, open-source, real-time preview Markdown editor for macOS, Windows and Linux. Beautiful typography, 33 built-in themes, math, diagrams, footnotes — all rendered live.'

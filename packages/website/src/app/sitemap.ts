@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { ALL_PAGES } from '@/lib/docs-nav'
 
-const SITE = 'https://github.com/cmassat/craftytext'
+const SITE = 'https://craftytext.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

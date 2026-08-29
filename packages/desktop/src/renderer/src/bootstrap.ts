@@ -110,7 +110,7 @@ const bootstrapRenderer = (): void => {
   const { debug, initialState, userDataPath, windowId, type } = parseUrlArgs()
   // RendererPaths throws when userDataPath is missing; preserve that runtime check.
   const paths = new RendererPaths(userDataPath as string)
-  const marktext = {
+  const craftytext = {
     initialState,
     env: {
       debug,
@@ -122,7 +122,7 @@ const bootstrapRenderer = (): void => {
   }
   // `global` is not available in a sandboxed renderer — attach to window.
   // RendererPaths has no string index signature, so widen through `unknown`.
-  window.marktext = marktext as unknown as Window['marktext']
+  window.craftytext = craftytext as unknown as Window['craftytext']
 
   configureLogger()
 }

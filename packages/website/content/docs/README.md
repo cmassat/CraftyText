@@ -2,7 +2,7 @@
 
 Welcome to the end-user documentation of CraftyText.
 
-![](assets/marktext-interface-2.png)
+![](assets/craftytext-interface-2.png)
 
 **Quick start:**
 

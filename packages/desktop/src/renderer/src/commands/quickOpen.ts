@@ -97,7 +97,7 @@ class QuickOpenCommand {
   }
 
   executeSubcommand = async (id: string): Promise<void> => {
-    const { windowId } = window.marktext?.env ?? {}
+    const { windowId } = window.craftytext?.env ?? {}
     if (windowId === undefined) return
     window.electron.ipcRenderer.send('mt::open-file-by-window-id', windowId, id)
   }

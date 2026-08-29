@@ -98,16 +98,10 @@ const setupEnvironment = (args: Record<string, unknown>): AppEnvironment => {
     CRAFTYTEXT_DEBUG: boolean
     CRAFTYTEXT_DEBUG_VERBOSE: number
     CRAFTYTEXT_SAFE_MODE: boolean
-    MARKTEXT_DEBUG: boolean
-    MARKTEXT_DEBUG_VERBOSE: number
-    MARKTEXT_SAFE_MODE: boolean
   }
   mutableGlobal.CRAFTYTEXT_DEBUG = debug
   mutableGlobal.CRAFTYTEXT_DEBUG_VERBOSE = verbose
   mutableGlobal.CRAFTYTEXT_SAFE_MODE = safeMode
-  mutableGlobal.MARKTEXT_DEBUG = debug
-  mutableGlobal.MARKTEXT_DEBUG_VERBOSE = verbose
-  mutableGlobal.MARKTEXT_SAFE_MODE = safeMode
 
   return appEnvironment
 }

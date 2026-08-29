@@ -63,7 +63,7 @@ const cli = (): ParsedArgs => {
   }
 
   if (args['--version']) {
-    writeLine(`CraftyText: ${MARKTEXT_VERSION_STRING}`)
+    writeLine(`CraftyText: ${CRAFTYTEXT_VERSION_STRING}`)
     writeLine(`Node.js: ${process.versions.node}`)
     writeLine(`Electron: ${process.versions.electron}`)
     writeLine(`Chromium: ${process.versions.chrome}`)

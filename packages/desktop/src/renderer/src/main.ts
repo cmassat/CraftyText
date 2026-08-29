@@ -23,7 +23,7 @@ import './assets/styles/printService.css'
 
 // -----------------------------------------------
 
-window.marktext = {}
+window.craftytext = {}
 bootstrapRenderer()
 
 // -----------------------------------------------
@@ -37,7 +37,7 @@ app.use(ElementPlus, {
   locale: en
 })
 
-const envType = window.marktext?.env?.type as string | undefined
+const envType = window.craftytext?.env?.type as string | undefined
 
 const router = createRouter({
   history: createWebHashHistory(),

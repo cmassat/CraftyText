@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This is a pnpm monorepo for MarkText. The Electron desktop app lives in `packages/desktop`, with process-specific code under `src/main`, `src/preload`, and `src/renderer/src`. Shared desktop types and utilities are in `src/shared` and `src/common`. Desktop assets are in `packages/desktop/src/renderer/src/assets`, while packaged static files such as locales are in `packages/desktop/static`.
+This is a pnpm monorepo for CraftyText. The Electron desktop app lives in `packages/desktop`, with process-specific code under `src/main`, `src/preload`, and `src/renderer/src`. Shared desktop types and utilities are in `src/shared` and `src/common`. Desktop assets are in `packages/desktop/src/renderer/src/assets`, while packaged static files such as locales are in `packages/desktop/static`.
 
 The editor engine packages are split between `packages/muya` (TypeScript core) and `packages/muyajs` (legacy JavaScript package). The documentation/marketing site is in `packages/website`. Repository-level automation lives in `scripts`, and build outputs such as `dist` and `out` should not be edited directly.
 
@@ -19,7 +19,7 @@ Use Node `>=20.19.0` and pnpm `>=10`.
 - `pnpm typecheck`: run `vue-tsc` for the desktop package.
 - `pnpm check`: run lint and typecheck together.
 
-For package-specific work, prefer filters, for example `pnpm --filter @muyajs/core test` or `pnpm --filter marktext-website lint`.
+For package-specific work, prefer filters, for example `pnpm --filter @muyajs/core test` or `pnpm --filter craftytext-website lint`.
 
 ## Coding Style & Naming Conventions
 

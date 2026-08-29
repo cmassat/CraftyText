@@ -1,7 +1,7 @@
 import { loadEditCommands } from './edit'
 import { loadFileCommands } from './file'
 import { loadFormatCommands } from './format'
-import { loadCraftyTextCommands } from './marktext'
+import { loadCraftyTextCommands } from './craftytext'
 import { loadParagraphCommands } from './paragraph'
 import { loadViewCommands } from './view'
 import { loadWindowCommands } from './window'

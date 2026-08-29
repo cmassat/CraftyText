@@ -4,7 +4,7 @@
   "description": "CraftyText monorepo root",
   "private": true,
   "type": "module",
-  "homepage": "https://github.com/cmassat/craftytext",
+  "homepage": "https://craftytext.com",
   "packageManager": "pnpm@10.33.4",
   "engines": {
     "node": ">=20.19.0",

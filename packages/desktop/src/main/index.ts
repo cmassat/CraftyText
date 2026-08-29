@@ -15,10 +15,11 @@ import { t } from './i18n'
 import { registerSandboxIpcHandlers } from './ipc'
 
 // Set version strings into global and process.versions
-process.env.CRAFTYTEXT_VERSION = MARKTEXT_VERSION
-process.env.CRAFTYTEXT_VERSION_STRING = MARKTEXT_VERSION_STRING
-process.env.MARKTEXT_VERSION = MARKTEXT_VERSION
-process.env.MARKTEXT_VERSION_STRING = MARKTEXT_VERSION_STRING
+process.env.CRAFTYTEXT_VERSION = CRAFTYTEXT_VERSION
+process.env.CRAFTYTEXT_VERSION_STRING = CRAFTYTEXT_VERSION_STRING
+// Keep the former environment names as compatibility aliases for scripts and integrations.
+process.env.MARKTEXT_VERSION = CRAFTYTEXT_VERSION
+process.env.MARKTEXT_VERSION_STRING = CRAFTYTEXT_VERSION_STRING
 
 // -----------------------------------------------
 // Exception handling and logging setup

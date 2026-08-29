@@ -27,9 +27,8 @@ let logger: Logger = (s) => console.error(s)
 const isStableRelease = (): boolean => {
   const releaseGlobals = global as unknown as {
     CRAFTYTEXT_IS_STABLE?: boolean
-    MARKTEXT_IS_STABLE?: boolean
   }
-  return !!(releaseGlobals.CRAFTYTEXT_IS_STABLE || releaseGlobals.MARKTEXT_IS_STABLE)
+  return !!releaseGlobals.CRAFTYTEXT_IS_STABLE
 }
 
 const getOSInformation = (): string => {
@@ -39,7 +38,7 @@ const getOSInformation = (): string => {
 const exceptionToString = (error: Error, type: ErrorType): string => {
   const { message, stack } = error
   return (
-    `Version: ${process.env.CRAFTYTEXT_VERSION_STRING || MARKTEXT_VERSION_STRING || app.getVersion()}\n` +
+    `Version: ${process.env.CRAFTYTEXT_VERSION_STRING || CRAFTYTEXT_VERSION_STRING || app.getVersion()}\n` +
     `OS: ${getOSInformation()}\n` +
     `Type: ${type}\n` +
     `Date: ${new Date().toUTCString()}\n` +
@@ -100,7 +99,7 @@ ${title}.
 
 ### Version
 
-CraftyText: ${MARKTEXT_VERSION_STRING}
+CraftyText: ${CRAFTYTEXT_VERSION_STRING}
 Operating system: ${getOSInformation()}`
         )
         break
