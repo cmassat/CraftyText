@@ -209,8 +209,8 @@ export const usePreferencesStore = defineStore('preferences', {
     spellcheckerLanguage: 'en-US',
 
     // Default values that are overwritten with the entries below.
-    sideBarVisibility: false,
-    tabBarVisibility: false,
+    sideBarVisibility: true,
+    tabBarVisibility: true,
     sourceCodeModeEnabled: false,
     openedFilesInSidebar: true,
 
