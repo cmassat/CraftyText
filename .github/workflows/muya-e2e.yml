@@ -33,6 +33,8 @@ jobs:
         project: [chromium]
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: ./.github/actions/setup
 
       - name: Install Playwright browser (${{ matrix.project }})

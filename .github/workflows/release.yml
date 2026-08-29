@@ -61,6 +61,8 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4.3.1
+        with:
+          lfs: true
 
       - name: Enable Git long paths on Windows
         if: matrix.platform == 'windows'
